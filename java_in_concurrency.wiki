@@ -1,0 +1,64 @@
+=== Java in concurrency ===
+    Writing thread-safe code is, at its core, about managing access to state, and in particular to shared, mutable state.
+
+    The primary mechanism for synchronization in Java is the synchronized keyword, which provides exclusive locking, but the term "synchronization" also includes the use of volatile variables, explicit locks, and atomic variables
+
+    Every Java object can implicitly act as a lock for purposes of synchronization; these built-in locks are called intrinsic locks or monitor locks. The lock is automatically acquired by the executing thread before entering a synchronized block
+
+    But because intrinsic locks are reentrant, if a thread tries to acquire a lock that it already holds, the request succeeds 
+
+    *Race condition*: occurs when the correctness of a computation depends on the relative timing or interleaving of multiple threads by the runtim
+
+    For each mutable state variable that may be accessed by more than one thread, all accesses to that variable must be performed with the same lock held. In this case, we say that the variable is _guarded by_ that lock. @GuardedBy
+
+    It is also easy to subvert this locking protocol accidentally by adding a new method or code path and forgetting to use synchronization. *Code auditing tools like FindBugs can identify when a variable is frequently but not always accessed with a lock held, which may indicate a bug*
+
+    For every *invariant* that involves more than one variable, all the variables involved in that invariant must be guarded by the same lock.
+
+    local (stack-based) variables NO NEED for synchronize control, since it's NOT shared status
+
+    find out the *invariant part or say compound actions* and lock it is the challenging work.
+
+    Synchronization also has another significant, and subtle, aspect: *memory visibility*
+
+    Reading data without synchronization is analogous to using the READ_UNCOMMITTED isolation level in a database, where you are willing to trade accuracy for performance
+
+    *Locking is not just about mutual exclusion; it is also about memory visibility. To ensure that all threads see the most up-to-date values of shared mutable variables*
+
+    *Volatile* variables are not cached in registers or in caches where they are hidden from other processors, so a read of a volatile variable always returns the most recent write by any thread.
+
+
+    Accessing shared, mutable data requires using synchronization; one way to avoid this requirement is to not share. If data is only accessed from a single thread, no synchronization is needed. This technique, thread *confinement*, is one of the simplest ways to achieve thread safety
+
+    The JDBC specification does not require that Connection objects be thread-safe.[9] In typical server applications, a thread acquires a connection from the pool, uses it for processing a single request, and returns it. Since most requests, such as servlet requests or EJB (Enterprise JavaBeans) calls, are processed synchronously by a single thread, and the pool will not dispense the same connection to another thread until it has been returned, this pattern of connection management implicitly *confines the Connection to that thread* for the duration of the request
+    
+    Thread Confile: 1. Use stack variable;  2. use ThreadLocal
+
+    Conceptually, you can think of a ThreadLocal<T> as holding a Map<Thread,T> that stores the thread-specific values.
+
+    *Just as it is a good practice to make all fields private unless they need greater visibility [EJ Item 12], it is a good practice to make all fields final unless they need to be mutable.*
+
+    Race conditions in accessing or updating multiple related variables can be eliminated by using an immutable object to hold all the variables. With a mutable holder object, you would have to use locking to ensure atomicity; with an immutable one, once a thread acquires a reference to it, it need never worry about another thread modifying its state. If the variables are to be updated, a new holder object is created, but any threads working with the previous holder still see it in a consistent state.
+
+    publishing objects before they are *fully constructed* can compromise thread safety. An object that is published when it should not have been is said to have *escaped*.
+
+    But an object is in a predictable, consistent state only after its constructor returns. 只有构造器返回后，这个 instance 才算构造完整了；在构造器返回之前就暴露 instance 的引用的情况，都算Escape。Escape 了就会导致别的线程看到这个 instance 的状态不一致（废话）
+
+    An object is *immutable* if: (1)Its state cannot be modifled after construction;   (2) All its flelds are final (3)It is properly constructed (the this reference does not escape during construction).
+
+    *概括说, immutable对象就是，构造时不能 escape，构造之后所有状态不可变。*
+
+
+    Java's built-in (intrinsic) locks are sometimes called monitor locks or monitors. The bytecode instructions for entering and exiting a synchronized block are even called monitorenter and monitorexit, 
+
+    
+
+    
+
+    
+
+    
+    
+    
+
+    

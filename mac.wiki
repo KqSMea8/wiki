@@ -1,0 +1,14 @@
+=== mac ===
+1. use key to choose and confirm
+
+   * keyboard -> mission control -> All controls.
+   * then select with tab and confirm with space.
+   
+2. 快速存储图片: skitch 截图，cmd+e 
+ 
+=== iterm ===
+{{{
+cmd-d               # split window 
+cmd-shift-d         # split window vertically
+cmd+[,]             # select left/right window,
+}}}

@@ -1,0 +1,16 @@
+==== vimwiki ====
+[[http://thedarnedestthing.com/vimwiki%20cheatsheet | cheatsheet ]]
+
+{{{
+:VWS /java/      # search java
+:lopen           # show all matching 
+}}}
+
+
+==== ctrl-p ====
+{{{
+# use cmd+f to invoke
+c-b                 # different search mode. files/mru files/buffer
+c-p, c-n            # previews search; next search
+c-j, c-k            # choose search result
+}}}

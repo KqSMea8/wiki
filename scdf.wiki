@@ -1,0 +1,22 @@
+====yarn cluster====
+    1. US yarn cluster?
+    2. stability, HA, down/restart?  
+    3. monitor, resource usage.  yarn cluster monitor console? 
+    4. application expand/reduce, dynamically.  
+    5. 
+
+=====scdf=====
+    1. db, for storing task. redis, for analysis.
+    2. collect runtime info/logs from yarn.  store 30 days log, retrieve all log (eg.grep for key infomation)
+    3. release/rollback.
+    4. acl, only see his applications.
+    5. integrate with ignite to enrich analysis power
+    6. application monitor, alarm.
+
+
+1. Aone -> build out jar -> http endpoint for scdf to fetch
+2. Logging -> log channel -> into odps
+4. use stream name as config group -> store stream configuration into diamond and can be edit.
+5. yarn scale up/down not dynamically
+6. runtime yarn cluster in us
+7. collect all usecase suitble inside AE

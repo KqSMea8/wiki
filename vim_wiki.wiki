@@ -1,0 +1,29 @@
+==== Tips ====
+{{{
+:VWS /java/      # search java
+:lopen           # show all matching 
+:
+
+# Diary
+:,wi                            # open diary index
+:,w,w                           # write diary
+:VimwikiDiaryGenerateLinks      # generate diary index
+}}}
+
+==== Set code highlight ====
+1. using google [[https://github.com/google/code-prettify | code-prettify]] lib
+2. add <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script> to the template
+3. The code block in wiki will be convert the <pre> tag in html, we need every <pre> tag has the class <prettyprint> to adopt the code-prettify.
+4. find the wiki2html converter logic in /Users/chenliu/.vim/bundle/vimwiki/autoload/vimwiki/html.vim, add the class when generate <pre> tag.
+{{{
+785:      call add(lines, "<pre class=\"prettyprint\">")
+}}}
+
+====== REFERENCE ======
+[[http://www.picb.ac.cn/~xiaohang/vimwiki/tools/commands/vimwiki/Vimwiki1.1.1QR.pdf| cheatsheet]]
+
+[[https://raw.githubusercontent.com/vimwiki/vimwiki/master/doc/vimwiki.txt | vimwiki guild ]]
+
+
+[[https://www.linuxzen.com/shi-yong-vimwiki-git-zuo-zhi-shi-guan-li.html | customize wiki ]]
+

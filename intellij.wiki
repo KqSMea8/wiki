@@ -1,0 +1,21 @@
+===== misc =====
+{{{ 
+# 清除项目中所有 idea 工程文件
+find ./ -type f -name "*.iml" -exec rm -rf {} +;find . -type d -name "\.idea" -exec rm -rf {} +
+}}}
+
+===== debug =====
+1. drop frame, can go step back
+2. shif+F7, smart step, 一行内分步执行
+
+===== keymap =====
+{{{
+C-alt-u                 # pop up UML
+C-`                     # switch theams/views/keymaps...
+cmd-upArrow             # navigation bar
+cmd-option-t            # surround with if/try-catch/for ...
+alt-F7                  # find usage
+double Shift            # search Everywhere
+cmd-e                   # recent file
+shift-F4                # new window; can be put to other screen
+}}}

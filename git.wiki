@@ -1,0 +1,32 @@
+==== 回滚操作 ====
+{{{
+git revert <commit>     # 回滚到某个 ci, 不会删除 history，会再提交一次
+git revert HEAD~2       # 同上，回滚最近两次的提交
+
+git reset <commit>      # 重置 HEAD 到 <commit> 处，会删除提交记录，相当于抹去了几条。
+git reset HEAD~3        # 抹去最近3次提交，不会留下任何记录。
+                        # reset 之后提交到远程需要 git push -f, 因为删除几条记录，所以需要 force push。 revert 则不需要。
+}}}
+
+==== 分支操作 ====
+{{{
+git fetch --prune                   # 修剪本地分支(如远程已删除，本地跟着删除)
+git cherry-pick <commit>            # 获取某一个特定的comiit到本分支
+git revert <commit>                 # 与cherry pick 相反，拿掉某个 commit(不是删除，而是重新生成一个ci)
+
+git checkout -b my_br               # 新建本地分支
+git branch -d my_br                 # 删除本地分支
+git push origin --delete remote_br  # 删除远程分支
+}}}
+
+==== 清理本地 ====
+{{{
+git checkout .          # undo unstaged modification. (write content from index)
+git reset HEAD~n        # undo staged modification.
+git clean -df           # remove untracked files/directories.
+
+touch abc   # untracked
+git add abc # tracked and staged
+modify abc  # unstaged
+git add abc # staged.
+}}}

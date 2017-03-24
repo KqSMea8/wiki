@@ -1,0 +1,91 @@
+== code block ==
+0. *Wicked snnipt*
+{{{
+echo $(( 2#11 ))        # 3, base 2
+echo $(( 8#11 ))        # 9, base 8
+echo $(( 7#11 ))        # 8, base 7
+
+$#                      # number of params
+$*                      # all the positional params, seen as a single word
+$@                      # all the positional params, seen as a seperate word, can work with for.
+$?                      # exit status
+$$                      # PID of the script itself
+}}}
+2. *Reading from file*
+{{{
+#!/bin/bash
+# Reading lines in /etc/fstab.
+File=/etc/fstab
+
+{
+read line1
+read line2
+} < $File
+
+echo "First line in $File is:"
+echo "$line1"
+echo
+echo "Second line in $File is:"
+echo "$line2"
+
+exit 0
+
+# Now, how do you parse the separate fields of each line?
+ource ~/.vim/vimrcs/vimwiki.vim
+# Hint: use awk, or . . .
+}}}
+2. *一个规范的脚本。 注意E_NOARGS,以及注释的写法*
+{{{
+#!/bin/bash
+# rpm-check.sh
+
+#  Queries an rpm file for description, listing,
+#+ and whether it can be installed.
+#  Saves output to a file.
+# 
+#  This script illustrates using a code block.
+
+SUCCESS=0
+E_NOARGS=65
+
+if [ -z "$1" ]
+then
+  echo "Usage: `basename $0` rpm-file"
+  exit $E_NOARGS
+fi  
+
+{ # Begin code block.
+  echo
+  echo "Archive Description:"
+  rpm -qpi $1       # Query description.
+  echo
+  echo "Archive Listing:"
+  rpm -qpl $1       # Query listing.
+  echo
+  rpm -i --test $1  # Query whether rpm file can be installed.
+  if [ "$?" -eq $SUCCESS ]
+  then
+    echo "$1 can be installed."
+  else
+    echo "$1 cannot be installed."
+  fi  
+  echo              # End code block.
+} > "$1.test"       # Redirects output of everything in block to file.
+
+echo "Results of rpm test in file $1.test"
+
+# See rpm man page for explanation of options.
+
+exit 0
+}}}
+3. *参数不存在，则赋值默认值, 可以用 parameter expension 简*
+{{{
+if [ -z "$1" ]
+then
+  Filename=names.data       # Default, if no filename specified.
+else
+  Filename=$1
+fi  
+#+ Filename=${1:-names.data}
+#  can replace the above test (parameter substitution).
+}}}

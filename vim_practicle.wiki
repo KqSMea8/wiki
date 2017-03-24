@@ -1,0 +1,38 @@
+== Practicle vim ==
+     *1.* 范式： 一键移动，另一键操作
+    
+     *2.* 从插入模式退出，Esc(太远)， 或者 Ctrl-[    
+     
+     *2.1.* c-o，插入fdsfsdfds:模式下运行一条普通模式命令，然后马上回到插入模式；避免来回切换
+     
+     *3.* . 命令可以重复执行"上次修改"； 插入模式时指从进入插入，到退出插入
+     
+     *4.* Unary(一元命令)，复合命令
+     {{{
+     c      # c$, 重写到结尾. 记忆： change to end.
+     s      # cl, 替换当前字符。 记忆：substitute
+     i      # insert at beginning
+     a      # appending
+     o      # begin new line below
+     O      # begin new line above
+     }}}
+     
+    
+     *5.* The double quote indicates that the next character is the name of a register. So the command "rp means: "from the named register r, paste text." </br>A single quote indicates that the next character is an address
+     
+     *6.* a-z 26个寄存器，引用时小写是覆盖，大写是 append
+     
+     *7.* c-r{register}, 粘贴寄存器文本
+    
+     *8.* 
+     
+     *9.*
+     
+     *10.*
+     
+     *11.*
+     
+     *12.*
+     
+     *13.*
+     

@@ -1,0 +1,119 @@
+= Contents =
+            - [[#Help|Help]]
+            - [[#macro|macro]]
+            - [[#marks|marks]]
+            - [[#fold|fold]]
+            - [[#emacs for cli|emacs for cli]]
+            - [[#work with cli|work with cli]]
+            - [[#search & replace|search & replace]]
+            - [[#register|register]]
+            - [[#vim chrome|vim chrome]]
+            - [[#useful links|useful links]]
+
+=== Help ===
+[[ http://vimdoc.sourceforge.net/htmldoc/ | html doc ]]
+{{{ 
+:h              # open help.txt, read it!
+}}}
+
+
+=== macro ===
+{{{ 
+qd          # start recording to register d
+...         # a series of commands
+q           # stop recording
+@d          # execute your macro
+@@          # execute macro again
+}}}
+
+=== marks ===
+{{{
+mx          # set mark to x
+:marks      # list marks
+'x          # goto mark x
+``          # 最近两处来回跳
+}}}
+
+=== fold ===
+{{{
+:h fold     # see fold help
+zo, zO      # open fold/ recursively
+zc, zC      # close fold/ recursively
+}}}
+
+
+
+=== emacs for cli ===
+{{{
+c-p, c-n            # previous line, next line.  cli: preview/next command
+c-f, c-b            # forward/backword a char
+c-d                 # delete current
+c-a, c-e            # go begin/end of line]
+M-f, M-b            # forword/backword a word (M:alt)
+}}}
+
+
+=== work with cli ===
+{{{
+q:              # open up ex-command history, and then you can choose history and run it.
+@:                      # 重复上次的 ex command
+C-z             # go outside to CLT, fg to bring back.
+fg              # fg 是 job control 中的命令，不加参数表示将上一个 background 的 job 拿到 FrondGround
+!!<cmd>         # 插入命令运行的结果
+!<cmd>          # 临时运行一次 cmd
+:=                      # 查看文件总行数
+:set nu                  # show line number
+:set nonu                # hide line number
+:3,6d                   # delete 3~6 line`
+:3,5s/hello/hi          # 3到5行，substitute hello to hi
+:%s/hello/hi/g          # % 表示当前文件，整个文件替换 hello 到 hi
+:[range]m{address}      # move the range line to the address
+:3,5m14                 # move 3~6 after 14
+:[range]t{address}      # bring to address
+:6t.                    # 将第六行复制到当前行, t is alias for co
+:3,6w another           # 3~6 line, write to another
+:9,13w >>another        # 将9-13行追加到文件another后面
+:r another              # 将another文件的内容追到到当前文件光标后
+:g/pattern/nu           # 搜索所有满足pattern的地方，带行号显示出来
+:.,$p                   # . 代表当前行,$代表末行，p代表print
+:%s                     # % 代表所有行，s代表替换。结合就是全文查找替换
+12Gyy <C-o>p            # 跳到12行复制，然后再跳回来粘贴, <C-o> 来回跳
+:%norm A;               #  在所有行未加添加分号。 %：所有行， norm 运行normal命令 A;:
+高亮选择文本，然后按 :  # 在高亮全区内执行ex。'< 表示选取首行，'> 表示选取尾行
+}}}
+
+=== search & replace ===
+{{{
+q/                                      # view and recall search
+:%s/\s\+$//g                            # 删除行尾空格 \s表示空格， \+表示多个
+:%s/^\s+//g                             # 删除行首空格 
+:1,10s/foo/bar/g                        # 1到10行替换。 1,10换成% 就表示整个文件（1，$）
+}}}
+
+=== register ===
+[[ http://usevim.com/2012/04/13/registers/| register 101 ]]
+{{{
+"                   # unamed register, delete or yank will fill this register
+0                   # yank register
+.                   # what i just typed（read only）
+:                   # 上次执行的命令
+*                   # clipboard
+%                   # 当前文件，当前 buffer
+/                   # 上次搜索
+<C-r>{register}     # 在插入模式下，读入寄存器中的内容
+<C-r>=    # 访问表达式寄存器(expression register)
+}}}
+
+
+=== vim chrome ===
+1. ? to trigger helps 
+2. [[https://github.com/philc/vimium/issues/840 | how to lost focus from address]]
+
+
+=== useful links ===
+[[http://thedarnedestthing.com/grokking%20vim | grokking vim ]]
+
+[[http://www.fprintf.net/vimCheatSheet.html | vim command cheetsheet]]
+
+[[ http://segmentfault.com/u/nightire/blogs | vim 哲学 ]]
+

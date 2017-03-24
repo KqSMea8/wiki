@@ -1,0 +1,17 @@
+== Nothing's Personal Wiki ==
+
+[[lang]]
+
+[[linux]]
+
+[[vim]]
+
+[[tools]]
+
+[[english]]
+
+[[reading]]
+
+[[tmp]]
+
+[[scdf]]

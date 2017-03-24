@@ -1,0 +1,23 @@
+====set up minikube====
+{{{ 
+minikube delete  && minikube start --show-libmachine-logs   # reinstall minikube vm
+minikube ssh                # 登录到部署了 minikube 的 vm，同时也是 docker demon 运行的 vm
+sudo sed -i "s|ExecStart=/usr/bin/docker daemon|ExecStart=/usr/bin/docker daemon --registry-mirror=https://qxx96o44.mirror.aliyuncs.com|g" /etc/systemd/system/docker.service    # 在 vm 中，设置 docker 仓库的镜像
+sudo systemctl daemon-reload && sudo systemctl restart docker      #  让 mirror 生效，在 vm 中重启 docker damon 
+}}}
+
+====kubectl command====
+3. 自恢复，自维护的集群。 This provides a self-healing mechanism to address machine failure or maintenance
+4. kubectl 动作 资源： kubectl action(create,delete) resource(node,container).   
+7. k8s中的原子单位是 pod，pod 是一个逻辑 host. 部署时k8s创建 pod(pod中包含 containers）
+5. 部署完之后，应用只在 k8s 内部可见。 可用 kubectl proxy 来创建本机到 k8s 集群的代理
+6. 另一种暴露服务的方法，kubectl expose deployment hello-node --type=LoadBalancer。然后运行 minikube service hello-node --url 就可以获取暴露出来的 url
+8. kubectl logs <POD-NAME> 查看日志
+9. 
+
+====clean up====
+{{{
+kubectl delete service hello-node
+kubectl delete deployment hello-node
+minikube stop   # optional
+}}}

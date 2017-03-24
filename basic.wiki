@@ -1,0 +1,28 @@
+== 基础 ==
+1. [[http://www.tldp.org/LDP/abs/html/io-redirection.html |I/O redirect]]
+{{{
+ls /abc > ls_output 2>&1        # 重定向 stderr 和 stdout 到同一个文件 ls_output
+}}}
+
+2. 批量文件操作
+{{{
+# find 和 xargs 连用时，养成习惯 -print0 | xargs -0 ，表示用NUL（\u00）做文件分隔，这样就能处理特殊文件名了。
+find . -name "*.md" -type f  -print0 | xargs -0 -I {} mv {} {}_bak     # 批量备份某种文件
+for f in $(find . -name "*_bak" -type f); mv "$f" "${f%_bak}"          # convert back.
+find . -name "*_bak" -print0 | xargs -0 -I {} mv {} $(echo {}|sed 's/_bak//g')   # Why this can NOT work?
+
+
+find . -name "*.md" -print0 | xargs -0 -I {} cp -p {} /target_path/     # 批量拷贝
+
+find . -name "*.md" -print0 | xargs -0 sed 's/foo/bar/g'                # 批量替换文件中的 foo 到 bar
+find . -name "*.md" -print0 | xargs -0 -i '' 's/foo/bar/g'              # mac 中需要加上-i参数，参数值置空标识不备份
+}}}
+
+3. RPM
+{{{
+# 查找 ssh-copy-id 是哪个rpm 安装的
+which ssh-copy-id                   # /usr/bin/ssh-copy-id
+rpm -qf /usr/bin/ssh-copy-id        # openssh-clients-5.3p1-118.1.el6_8.x86_64
+rpm install openssh-clients         # 安装这个 rpm 包，去掉后面的版本等信息
+}}}
+5. 

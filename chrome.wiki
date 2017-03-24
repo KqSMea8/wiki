@@ -1,0 +1,5 @@
+    cmd + k                     # clear console
+    
+    Network 选项卡里， 右键 copy，copy as curl， 然后就可以用 curl 测试啦
+
+[[http://coolshell.cn/articles/17634.html|小技巧]]

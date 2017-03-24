@@ -1,0 +1,36 @@
+
+cwbuy  qif_cgs
+hello1234
+
+
+segmentation(切分)
+dereplication(去重)
+aggregation(聚合)
+
+1. deployment, apache yarn cluster, dynamic expand?
+2. program mode advocate: spring-cloud-stream
+3. app fine-grained tunning(port,log_path..), message broker tunning(partition,accumulation_size...)
+4. data-analysis(segment,dereplicate,aggregate)
+5. data input and output (integrate with current middleware: eg. TLog, odps）
+6. app,stream,task monitor
+7. flo customize, security
+
+
+1. how to publish stream, how to roll back(version control?)
+2. how to dynamically expand/reduce the app count
+3. how to monitor the apps inside the container
+4. how to view the app logs, tail the log?
+5. security access?
+
+场景
+1. 应用配置精卫，df-app 监听 jw 对应的 metaQ 消息然后 evictCache
+2. 应用需要发邮件，发出消息（邮件模板，占位符等）， df-app 监听消息，调用 emailClient 发出邮件
+3. 
+
+ae-account问题
+1. 头像上传问题, jpg(...)
+2. MobilePhone(Contact) 无法更新
+3. department & jobTitle 已经没有此概念，直接去掉？
+4. 
+
+
