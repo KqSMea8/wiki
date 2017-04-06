@@ -1,4 +1,4 @@
-=== yarn ===
+== YARN ==
     RM is global, AM is per-application
     
     YARN APIs are complex and writing a custom YARN based application is difficult. The YARN APIs are low-level infrastructure APIs, not high-level developer APIs.
@@ -9,3 +9,13 @@
     
     Client -> RM: to launch AM container</br>
     AM -> NM: to launch Application container
+    
+    
+== HDFS ==
+    port : 50070
+    
+    name node <br>
+    data node
+    
+    {{local:./images/hadoop/hdfs1.png}}
+    

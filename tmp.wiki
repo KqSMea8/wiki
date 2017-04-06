@@ -34,3 +34,21 @@ ae-account问题
 4. 
 
 
+deploy command==> /Users/chenliu/.jenv/candidates/java/current/bin/java
+
+--------------------------
+deploy jvm_opts==> 
+-Dspring.config.location=/Users/chenliu/demos/scdf/spring-cloud-dataflow-server-yarn/spring-cloud-dataflow-server-yarn-dist/target/spring-cloud-dataflow-server-yarn-1.2.0.BUILD-SNAPSHOT/config//servers.yml 
+
+-Ddeployer.yarn.app.appmaster.path=/Users/chenliu/demos/scdf/spring-cloud-dataflow-server-yarn/spring-cloud-dataflow-server-yarn-dist/target/spring-cloud-dataflow-server-yarn-1.2.0.BUILD-SNAPSHOT/lib
+
+-Ddeployer.yarn.app.container.path=/Users/chenliu/demos/scdf/spring-cloud-dataflow-server-yarn/spring-cloud-dataflow-server-yarn-dist/target/spring-cloud-dataflow-server-yarn-1.2.0.BUILD-SNAPSHOT/lib 
+
+-Ddeployer.yarn.app.config.path=/Users/chenliu/demos/scdf/spring-cloud-dataflow-server-yarn/spring-cloud-dataflow-server-yarn-dist/target/spring-cloud-dataflow-server-yarn-1.2.0.BUILD-SNAPSHOT/config/
+---------------------------
+
+app_home==> /Users/chenliu/demos/scdf/spring-cloud-dataflow-server-yarn/spring-cloud-dataflow-server-yarn-dist/target/spring-cloud-dataflow-server-yarn-1.2.0.BUILD-SNAPSHOT
+
+df version==> 1.2.0.BUILD-SNAPSHOT
+
+params==>

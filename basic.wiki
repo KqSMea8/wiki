@@ -25,4 +25,10 @@ which ssh-copy-id                   # /usr/bin/ssh-copy-id
 rpm -qf /usr/bin/ssh-copy-id        # openssh-clients-5.3p1-118.1.el6_8.x86_64
 rpm install openssh-clients         # 安装这个 rpm 包，去掉后面的版本等信息
 }}}
-5. 
+
+4. 默认开机开启服务
+{{{
+sudo chkconfig --levels 235 mysqld on
+sudo chkconfig --levels 235 nginx on
+sudo chkconfig --levels 235 php-fpm on
+}}}
