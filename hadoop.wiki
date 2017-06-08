@@ -10,6 +10,11 @@
     Client -> RM: to launch AM container</br>
     AM -> NM: to launch Application container
     
+===== yarn 运行步骤 =====
+* 步骤1：用户将应用程序提交到ResourceManager上；
+* 步骤2：ResourceManager为应用程序ApplicationMaster申请资源，并与某个NodeManager通信，以启动ApplicationMaster；
+* 步骤3：ApplicationMaster与ResourceManager通信，为内部要执行的任务申请资源，一旦得到资源后，将于NodeManager通信，以启动对应的任务。
+* 步骤4：所有任务运行完成后，ApplicationMaster向ResourceManager注销，整个应用程序运行结束。
     
 == HDFS ==
     port : 50070
@@ -19,3 +24,170 @@
     
     {{local:./images/hadoop/hdfs1.png}}
     
+== SCDF ON YARN ==
+{{{
+# some config
+hadoop:
+    fsUri: hdfs://10.101.167.6:8020
+    resourceManagerHost: 10.101.164.58
+    resourceManagerPort: 8050
+    resourceManagerSchedulerAddress: 10.101.164.58:8030
+
+datasource:
+    url: jdbc:mysql://localhost:3306/df_test
+    username: root
+    password:
+    driverClassName: org.mariadb.jdbc.Driver
+
+DEFAULT_JVM_OPTS="-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n"
+}}}
+
+
+{{{
+jvm opts: -Dspring.config.location=/Users/chenliu/demos/scdf/spring-cloud-dataflow-server-yarn/spring-cloud-dataflow-server-yarn-dist/target/spring-cloud-dataflow-server-yarn-1.2.0.BUILD-SNAPSHOT/config//servers.yml 
+
+-Ddeployer.yarn.app.appmaster.path=/Users/chenliu/demos/scdf/spring-cloud-dataflow-server-yarn/spring-cloud-dataflow-server-yarn-dist/target/spring-cloud-dataflow-server-yarn-1.2.0.BUILD-SNAPSHOT/lib
+
+-Ddeployer.yarn.app.container.path=/Users/chenliu/demos/scdf/spring-cloud-dataflow-server-yarn/spring-cloud-dataflow-server-yarn-dist/target/spring-cloud-dataflow-server-yarn-1.2.0.BUILD-SNAPSHOT/lib 
+
+-Ddeployer.yarn.app.config.path=/Users/chenliu/demos/scdf/spring-cloud-dataflow-server-yarn/spring-cloud-dataflow-server-yarn-dist/target/spring-cloud-dataflow-server-yarn-1.2.0.BUILD-SNAPSHOT/config/
+
+
+
+echo "------------------------------------"
+echo "jvmcmd: ${JAVA_CMD}"
+echo "jvm opts: ${JVM_OPTS[@]}"
+echo "param: $@ "
+echo "------------------------------------"
+
+
+java -Xms2g -Xmx2g -Xmn1g -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=256m -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -Dspring.config.location=classpath:/servers.yml -jar ae-middleware-scdf-b.jar &
+
+
+# deploy properties
+
+app.time-source-metaq.spring.cloud.stream.bindings.output.group=my_time_source_group
+
+app.time-source-metaq-104.spring.cloud.stream.bindings.output.destination=time-topic-104,app.log-sink-metaq-104.spring.cloud.stream.bindings.input.destination=time-topic-104
+
+app.time-source-metaq-104.spring.cloud.stream.bindings.output.destination=input
+
+}}}
+
+
+== yarn commands ==
+{{{
+# hdfs: http://10.101.167.6:50070/explorer.html#/
+# yarn cluster: http://10.101.164.58:8088/cluster
+ssh chenliu.cl@10.101.167.6
+hadoop fs -rm -r -f /user/the/path/to/your/dir                  # delete folders
+yarn application -kill application_1491567289084_0001           # kill application
+}}}
+
+
+
+== high level overview about scdf ==
+1. EnableDataFlowServer annotation will lead to do auto-conf: DataFlowControllerAutoConfiguration, which will auto config a lots of beans(Repo, ResourceLoader, UriRegistry(mysql tables),Controllers ...)
+2. Flo, invoke the Controllers from step-1
+3. eg. Deploy a stream, will invoke StreamDeploymentController#deploy (this.deployer.deploy(request); Line 244) 
+
+scdf-server layer
+--------------------
+scdf-deployer layer
+
+5. YarnAppDeployer#deploy, not directly call yarnClient to deploy app,  instead, using spring-stateMachine, send a deploy event.
+6. state-machine( stateA -> stateB : event)
+7. On the other hand, spring-cloud-deployer-yarn project, listen to the deploy event, and then trigger the action: PushAppAction(push app into hdfs)
+8. Using YarnCloudAppService#pushApplciation
+9. will create a YarnAppServiceApplication using SpringApplicationBuilder, which is wrapper the features of spring-boot-yarn(have configured yarn client, see stream.yml for yarn configuration).
+10. Using YarnClient(belongs to spring-yarn project) to install the application.
+
+submit and run the application, almost the same, except introduce the
+appdeloyerappmaster and  tasklauncherappmaster
+
+== 模块 ==
+1. *spring-cloud-dataflow-server-core*:  autoconf controllers, db, resourceLoader etc.
+2. *spring-cloud-dataflow-ui*: angular js, invoke the df-server rest apis (registe app,create stream, deploy stream etc)
+3. *spring-cloud-deployer-spi*: interface for deploy scs, sct apps. Be called in rest-controller
+4. *spring-cloud-deployer-yarn*: provide Boot application wrapper features from spring-yarn-boot, provide yarnClient to communicate with yarn-cluster.
+5. *spring-cloud-deployer-appdeployerappmaster, spring-cloud-deployer-tasklauncherappmaster*: as AM for apply container from RM, and deploy the scs app.
+6. *spring-yarn-boot*: autoconfig hadoop-yarn, do a lot configurations.(yarn related config, hadoop config properties)
+7. *spring-data-hadoop*: used by spring-yarn-boot, wrapper the original apach-hadoop.
+spring-cloud-deployer-yarn-autoconfig
+    - spring-cloud-deployer-yarn
+    - spring-cloud-deployer-resource-support
+spring-cloud-dataflow-server-core
+    - spring-cloud-dataflow-core
+    - spring-cloud-dataflow-registry
+    - spring-cloud-deployer-spi
+    - spring-cloud-deployer-resource-maven (resource-aone to load jar file from aone ?)
+
+
+== Spring Yarn ==
+1. @EnableYarn(enable=Enable.CONTAINER), SpringYarnConfigurerAdapter 用来配置 yarn 的 container (类似 xml配置）
+2. YarnContainerConfigurer, YarnAppmasterConfigurer, YarnClientConfigurer 分别用来配置 Container，AppMaster，Client(和 YarnContainerBuilder、YarnAppmasterBuilder、YarnClientBuilder中被使用到，用来构造对应的 yarn 组件）.  
+3. YarnConfigConfigurer 用来配置 yarn 的一些全局配置，如fs-uri, resourceManagerAddress 等。
+
+
+
+
+scdf-server-yarn 运行之后，启动两类 SB 应用， 一个是 scdf-server-yarn 的应用，里面是一堆 controller + appRegister + mavenResourceLoader 等
+另外一个（一类）是yarn 相关的 SB 应用， 里面封装了一堆 yarn 相关的 bean，用来操作 yarn 集群（被yarnCloudAppService 使用）
+
+
+
+
+== scdf 问题 ==
+1. yarn，hdfs ，hadoop 一套体系不了解，运行时环境难控制。从运行时环境获取应用运行信息，日志等问题。
+2. 发布和回滚。
+3. ui 定制，权限等。
+4. statemachine 问题。整个 deployer-yarn 代码模块很多地方 hardcode 并且缺少文档
+5. scdf 还不够成熟。
+6. 
+
+
+
+
+== 部署逻辑 ==
+{{{
+YarnAppDeployer#deploy 用 statemachine 异步部署
+    -> DeployAction#execute 填充 statemachine 的 stateContext
+        -> StartInstanceAction 初始化 yarn-boot 应用，提交 AMContext, cacheKey:STREAMapp (有 CheckAppAction 的干扰,也会初始化一个 yarn-boot应用，cacheKey:STREAMnull)
+            ->PushArtifactAction 将 source 和 sink 的 jar 包推到 hdfs
+                ->
+ }}}
+                
+clusterId:     <group>:<app>  eg.  s101:jdbc
+spring.yarn.appName(yarn application 名字):  scdstream:app:s101
+
+
+一共启动了三个 yarn-boot 应用， 分别是
+1. STREAMnull -> ChechAppAction 中调用 getApp
+2. STREAMapp  -> PushAppAction 中调用getApp, 此应用用来 push appmaster 到 scdf;
+3. STREAMapp--spring.yarn.appName=scdstream:app:s204,--spring.yarn.client.launchcontext.arguments.--spring.cloud.deployer.yarn.appmaster.artifact=/dataflow//artifacts/cache/  -> StartInstanceAction, 用来 submitApplication(appmaster), 提交之后，appmaster 就启动啦。
+4. 最后再调用两次 PushArtifactAction 将 scs 应用推送到 hdfs. 剩下的启动 container 的的事情就是 appmaster 做啦，在 yarn 集群上运行，无法 debug。
+
+
+5. YarnAppDeployer 发送一个 DEPLOY msg。
+6. DeployAction 被激活。Action 中将 msg 中的内容放入到 StateContext 的ExtendedState中
+7. CheckAppAction 调用到 getApp , 构造出 yarn-sb 应用(servers.yml, stream.yml等8个 properties 来源, systemProperties中有 deployer.yarn.app.appmaster.path)
+8. PushAppAction 被激活。调用到 getApp，构造出 yarn-sb 应用(key:STREAMapp), 调用 yarnClient.installApplication,将 appmaster 复制到 hdfs
+9. StartInstanceAction 被激活。调用到 getApp，构造出 yarn-sb 应用（key: STREAMappcontextRunArgs）, 调用 yarnClient.submitApplicaiton 完成 ApplicationSubmissionContext 的提交
+10. PushArtifactAction 被激活。调用yarnCloudAppService.pushArtifact 将 scs 的 jar 包拷贝到 hdfs (jdbc artifact), push完之后，就能看到新启了一个 container，是被 appmaster 拉起来的。
+11. DeployAction -> PushArtifactAction(http artifact), 又一个 container 拉起来。
+
+
+
+
+=== Dataflow Doc ===
+1. The major concepts of the architecture are Applications, the Data Flow Server, and the target runtime.
+2. 
+
+
+
+
+
+
+
+
+

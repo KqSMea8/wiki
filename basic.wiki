@@ -32,3 +32,8 @@ sudo chkconfig --levels 235 mysqld on
 sudo chkconfig --levels 235 nginx on
 sudo chkconfig --levels 235 php-fpm on
 }}}
+
+5. find 查找文件，不要打印 Permission denied
+{{{
+find / -name 'hadoop_data' -type d  2>&1 | grep -v "Permission"
+}}}

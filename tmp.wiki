@@ -1,54 +1,86 @@
+[[05708886768]]
+
 
 cwbuy  qif_cgs
 hello1234
 
-
-segmentation(切分)
-dereplication(去重)
-aggregation(聚合)
-
-1. deployment, apache yarn cluster, dynamic expand?
-2. program mode advocate: spring-cloud-stream
-3. app fine-grained tunning(port,log_path..), message broker tunning(partition,accumulation_size...)
-4. data-analysis(segment,dereplicate,aggregate)
-5. data input and output (integrate with current middleware: eg. TLog, odps）
-6. app,stream,task monitor
-7. flo customize, security
+1. scdf 部署应用时，可以使用的 runtime platform
+2. scdf 的价值，随便两条
 
 
-1. how to publish stream, how to roll back(version control?)
-2. how to dynamically expand/reduce the app count
-3. how to monitor the apps inside the container
-4. how to view the app logs, tail the log?
-5. security access?
-
-场景
-1. 应用配置精卫，df-app 监听 jw 对应的 metaQ 消息然后 evictCache
-2. 应用需要发邮件，发出消息（邮件模板，占位符等）， df-app 监听消息，调用 emailClient 发出邮件
-3. 
-
-ae-account问题
-1. 头像上传问题, jpg(...)
-2. MobilePhone(Contact) 无法更新
-3. department & jobTitle 已经没有此概念，直接去掉？
-4. 
-
-
-deploy command==> /Users/chenliu/.jenv/candidates/java/current/bin/java
-
---------------------------
-deploy jvm_opts==> 
--Dspring.config.location=/Users/chenliu/demos/scdf/spring-cloud-dataflow-server-yarn/spring-cloud-dataflow-server-yarn-dist/target/spring-cloud-dataflow-server-yarn-1.2.0.BUILD-SNAPSHOT/config//servers.yml 
+jvm opts: -Dspring.config.location=/Users/chenliu/demos/scdf/spring-cloud-dataflow-server-yarn/spring-cloud-dataflow-server-yarn-dist/target/spring-cloud-dataflow-server-yarn-1.2.0.BUILD-SNAPSHOT/config//servers.yml 
 
 -Ddeployer.yarn.app.appmaster.path=/Users/chenliu/demos/scdf/spring-cloud-dataflow-server-yarn/spring-cloud-dataflow-server-yarn-dist/target/spring-cloud-dataflow-server-yarn-1.2.0.BUILD-SNAPSHOT/lib
 
 -Ddeployer.yarn.app.container.path=/Users/chenliu/demos/scdf/spring-cloud-dataflow-server-yarn/spring-cloud-dataflow-server-yarn-dist/target/spring-cloud-dataflow-server-yarn-1.2.0.BUILD-SNAPSHOT/lib 
 
 -Ddeployer.yarn.app.config.path=/Users/chenliu/demos/scdf/spring-cloud-dataflow-server-yarn/spring-cloud-dataflow-server-yarn-dist/target/spring-cloud-dataflow-server-yarn-1.2.0.BUILD-SNAPSHOT/config/
----------------------------
 
-app_home==> /Users/chenliu/demos/scdf/spring-cloud-dataflow-server-yarn/spring-cloud-dataflow-server-yarn-dist/target/spring-cloud-dataflow-server-yarn-1.2.0.BUILD-SNAPSHOT
 
-df version==> 1.2.0.BUILD-SNAPSHOT
 
-params==>
+echo "------------------------------------"
+echo "jvmcmd: ${JAVA_CMD}"
+echo "jvm opts: ${JVM_OPTS[@]}"
+echo "param: $@ "
+echo "------------------------------------"
+
+
+
+
+java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar app.jar
+
+YarnConfigBuilder shared: org.springframework.yarn.config.annotation.builders.YarnConfigBuilder@459cfcca
+
+
+
+====== 源码预读提示 ======
+SpringYarnConfigBuilder, log告知你的 yarn 配置
+
+AbstractDeployerStateMachine 会根据 state 变化，来调用YarnCloudAppService 服务去和 yarn 集群交互
+点击 deploy 之后，第一步是 pushApplication, 将应用 push 到 hdfs
+
+DefaultYarnCloudAppService 是 YarnCloudAppService 的实现。
+
+SpringYarnConfigs 存储 yarn 相关的配置:  yarnClient, yarnAM, yarnContainer, configuration, localizer, env.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+5.18 周四 (8:20 -- 11:45) 上海浦东 --> 大阪关西国际机场
+5.22 周一 (17:00 --19:10) 关西国际 --> 上海浦东
+
+5.18:  关西机场直接到京都。 住京都
+5.19:  京都一天。 住京都（联系包车？）
+5.20:  京都一天。 下午5：00 左右前往大阪，住大阪。（联系包车？）
+5.21:  大阪-> 奈良-> 大阪， 奈良半天或者一天,晚上回大阪，住大阪。(联系包车？）
+5.22:  大阪一天。 下午3点左右前往机场。
+
+
+
+
+
+
+1. header nav 框加宽， 字大一号。
+2. 
+
+
+
+
+

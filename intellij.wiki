@@ -18,4 +18,6 @@ alt-F7                  # find usage
 double Shift            # search Everywhere
 cmd-e                   # recent file
 shift-F4                # new window; can be put to other screen
+
+shift-Enter             # open file in pop window
 }}}

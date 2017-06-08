@@ -1,5 +1,5 @@
 == QUOTE ==
-1. We've found that if you let responsible people handle their own priorities on their own timeline, they'll end up getting the important stuff finished and still be able to work productively on other work.
+
 2. Code is a creative endeavor. You need to be in the right mindset to create high-quality code. Can't be measured by hours.
 3. There are global options and local (per-wiki) options available to *tune(调试，调优)* Vimwiki
 4. So steel yourself against the forces of chaos and confusion. Never lose faith that there will come a time when order and logic shine like the sun on a clear new day.

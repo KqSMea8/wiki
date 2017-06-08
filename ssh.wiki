@@ -1,0 +1,26 @@
+=== config two git account ===
+1. generate two ssh-key
+2. copy the pub_key into github/gitlab account settings.
+3. config ~/.ssh/config
+{{{
+# gitlab
+Host gitlab
+        HostName gitlab.alibaba-inc.com
+        IdentityFile ~/.ssh/id_rsa
+
+# github
+Host github
+        HostName github.com
+        IdentityFile ~/.ssh/id_rsa_home
+
+}}}
+4. *DO NOT FORGET* using  ssh-add to enable the sshkey
+{{{
+ssh-add ~/.ssh/id_rsa_home
+}}}
+5. if you want to use different name for different git account.*Inside the repo* setting the name and email
+{{{
+# the other repo will use default git config which is 纳信
+git config user.email "zjunothing@gmail.com"
+git config user.name "zjunothing"
+}}}

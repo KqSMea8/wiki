@@ -6,3 +6,5 @@
 {{{
 jar uf0 foo.jar BOOT-INFO/lib/mysql.jar         # 将 mysql.jar 添加到 foo.jar中 
 }}}
+3. sb debug 运行，暴露远程 debug 端口:
+java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar app.jar
