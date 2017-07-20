@@ -1,5 +1,5 @@
 # Personal wiki
-. Set up vimwiki env.
+1. Set up vimwiki env.
 2. vimrc settings for vimwiki
 ```
 let g:vimwiki_list = [{'path': '~/vimwiki',
