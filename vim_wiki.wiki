@@ -1,5 +1,5 @@
 ==== Tips ====
-{{{
+[[{{{]]
 :VWS /java/      # search java
 :lopen           # show all matching 
 

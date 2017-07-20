@@ -1,4 +1,4 @@
-=== Tips ===
+== Tips ==
 1. build 模式为什么用 static nested class
     * nested 因为要进入外部类私有变量。
     * static 因为可以直接 new 出对象。 非 static 的 inner class 需要先有外部对象才能再调用 outerInstance.newInnerClass()

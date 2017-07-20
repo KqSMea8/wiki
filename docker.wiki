@@ -1,0 +1,46 @@
+== concept ==
+1. mac 下的 docker-daemon 运行在一个 vm（linux）中。 可以通过下面命令进入此 vm。 在 container 中运行的进程，在此 vm 中也能看到, 因为在 container 中运行的 process 实际上就是运行在 host 机器（vm） 上的。
+   {{{
+   screen ~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty
+   }}}
+2. 
+
+
+
+
+
+
+== k8s ==
+{{{
+kubectl get pods -o wide        # list pods and ips
+
+}}}
+
+1. pod 是调度基本单位，一个 pod 一个 ip，一个 pod 可以包含多个 container（但是一般情况下一个 pod 包含一个 container, 除非 container 是一组功能相近的应用）; 一个 container 中跑一个进程（docker 概念，避免日志干扰等问题，环境更加纯粹）
+2. pod 启动的时候，k8s 会设置一些环境变量，包括当前集群中正在跑的 service ip， 这样 pod 起来时就能自动发现服务了。
+3. service的 ip 是 ping 不通的，因为他是一个虚拟 ip，只有当 curl <ip>:<port> 时才有用。
+4. 创建 rc 也好，service 也好，都是通过 lable 来指定他们包含的 pod 的。
+5. k82集群内置有一个叫 kuba-dns 的服务， k8s会修改所有 container 的/etc/resolv.conf文件,使他们能用 kuba-dns 服务来获取集群上所有服务的 dns 信息。dns 名就是服务名（同一 ns 下）
+6. Endpoints 概念用来配置service 地址，可以让k8s 集群和外接 internet 互相访问到。
+    * k8s 访问外界，为服务定义 endpoints；
+    * 外界访问 k8s 中的服务, 暴露成 NodePort 或者 loadBalancer 时，自然会创建一个external-ip 
+7. liveness probe 用来探测pod 是否还存活; 用readiness probe 探测pod 是否已经 full ready （接受外界请求）
+8. Deployment history 存储了一个个rs 的快照，如果删除了 rs，就不能回滚到那个特定版本了。
+9. rolling update 时候，不一定是起一个杀一个这样往复循环； 部署时有两个属性，maxSurge 和 maxUnavailable，可以控制一次性启停多少个容器（而非一个一个启停）
+10. 部署可以 pause 和 resume，类似分批发布。 canary release，类似 beta 发布
+11. 部署时可以设置minReadySecond, 表示启动之后要等多少秒健康检查(readiness probe, 每秒执行一次)之后才能上线。 如果健康检查不通过，部署就不会继续，然后就可以手动 undo 这次部署。
+12. k8s 中心组件是 API-Server，API-server 对 API object（resource）做 crud 操作。API object 的变化会由 API-server 通知给相应的组件，然后这些组件来做实际的 dirty work
+13. API object 描述了 k8s 集群应有的状态；Controllers 来做实际的 work 来使集群达到这个应有状态。
+14. 其实 Controllers 也没有做多少工作，它只是监听它需要关心的 API object 的变化,然后视情况来修改一些 API object。 
+15. 每个组件监听自己关心的 API object（resource），然后做相应的操作；通过 API object 作为交流的桥梁， 组件之间可以各司其职。
+16. 组件： API-server,Schedular,Controllers; Kubelet,Kubu-proxy. 
+17. 水平扩容，频率（几分钟能扩一次） 和 步长（一次能扩几台）需要关注。
+18. fdsafsdfa
+19. fdsafsd
+20. ffdsafsd
+
+
+== k8s 文档 ==
+1. Both user clients and components containing asynchronous controllers interact with the same API resources, which serve as coordination points, common intermediate representation, and shared state. Most resources contain metadata, including labels and annotations, fully elaborated desired state (spec), including default values, and observed state (status).
+2. Controllers work continuously to drive the actual state towards the desired state, while reporting back the currently observed state for users and for other controllers.(controller 两个工作： 1、确保实际状态和预期状态一致； 2、响应客户端对于当前状态的请求）
+[[3.]] 

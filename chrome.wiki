@@ -1,5 +1,14 @@
+== Tips == 
+    1. cvim 可以使用在本地 html 文件，需要在 chrome://extensions/ 中让 cvim 可以 access file url.
+    
+    2. cvim 从地址栏失去焦点： 在 search engine 中设置， 如快捷键 `l`（lost focus） 对应执行 `javascript:`   即可
+    
+== Dev Tool==
     cmd + k                     # clear console
     
     Network 选项卡里， 右键 copy，copy as curl， 然后就可以用 curl 测试啦
+    
+    
+== Reference ==
 
 [[http://coolshell.cn/articles/17634.html|小技巧]]

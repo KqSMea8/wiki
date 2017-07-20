@@ -1,0 +1,192 @@
+1. go 全局就一个 workspace，所有的 go 工程都在这个 workspace 里面。 workspace 的路径是 GOPATH,  如果不设置，默认路径是 $HOME/go
+2. go 环境的设置
+{{{
+# for golang
+# Go installation location, default value /usr/local/go
+export GOROOT=/usr/local/Cellar/go/1.7.1/libexec
+export PATH=$PATH:$GOROOT/bin   # so that you can use go command
+# GOPATH is the path to your workspace, default value is  $HOME/go
+export GOPATH=/Users/chenliu/gocode
+# GOBIN is the path to where your Go binaries are installed from running go install. Default location $GOPATH/bin.
+# GOBIN=$GOPATH/bin
+}}}
+4. workspace 中的目录结构是有约定的：src， pkg， bin 三个目录。
+5. worksapce 结构: {{local:./images/go/go_structure.png}}
+6. 可执行的 command 必须放在package main 下。
+7. 变量定义、赋值
+{{{
+//变量声明，可以放在函数内，也可以在函数外
+var a,b int
+var x bool
+
+// 变量声明的同时也赋值了，则可以省略变量类型，Go 会自动推断出类型
+// 可在函数内或者函数外。
+var a,b = 1, 3
+
+
+// 简写的变量声明, 只能在函数内部出现
+// Outside a function, every statement begins with a keyword (var, func, and so on) and so the := construct is not available.
+a:=3
+s:="Hello"
+}}}
+9. go 语言函数定义： func [接收者] 函数名( 参数列表，先名字后类型） （返回值列表，先名字后类型）
+{{{
+type Vertex struct {
+	X, Y float64
+}
+
+func (v *Vertex) Scale(f float64) {
+	v.X = v.X * f
+	v.Y = v.Y * f
+}
+
+func ScaleFunc(v *Vertex, f float64) {
+	v.X = v.X * f
+	v.Y = v.Y * f
+}
+
+func main() {
+	v := Vertex{3, 4}
+	// compile OK!  method receiver is pointer, but we can use value(or pointer) to invoke it. Go interprets it to (&v).Scale(2) as a convenience.
+    // 同理，如果你定义一个接受者为 pointer 的函数，使用值来调用v.method（而不是指针）,Go 也会帮你翻译成 (*v).method 来调用 
+	v.Scale(2)		 
+	ScaleFunc(&v, 10)
+	// compile error!  func with pointer as param, should pass-in a ponter.
+    // 同理，如果一个函数参数类型是值，你传入一个指针，也会报错。
+	ScaleFunc(v,10)	 
+
+	// for pointer, all is ok.
+	p := &Vertex{4, 3}
+	p.Scale(3)		
+	ScaleFunc(p, 8)
+
+	fmt.Println(v, p)
+}
+}}}
+8. go 的循环只有 for 循环，而且循环条件没有用小括号阔起来;  if 也可以没有小括号
+{{{
+for i := 0; i < 10; i++ {
+        sum += i
+            }
+//  use for as while
+for sum < 1000 {
+        sum += sum
+            }
+
+//  if statement
+if x < 0 {
+        return -x;
+        }
+}}}
+9. swith 语法：
+{{{
+fmt.Print("Go runs on ")
+	switch os := runtime.GOOS; os {
+	case "darwin":
+		fmt.Println("OS X.")
+	case "linux":
+		fmt.Println("Linux.")
+	default:
+		// freebsd, openbsd,
+		// plan9, windows...
+		fmt.Printf("%s.", os)
+	}
+}}}
+10. defer 关键字，将语句延迟到surrounding function 返回时才执行。
+11. 指针
+{{{
+var p *int    // The type *T is a pointer to a T value. Its zero value is nil.
+i:=42; p=&i;  // The & operator generates a pointer to its operand
+fmt.Println(*p) // read i through the pointer p
+*p = 21         // set i through the pointer p
+}}}
+12. Array ,  [n]T
+{{{
+	var a [2]string
+	a[0] = "Hello"
+	a[1] = "World"
+	fmt.Println(a[0], a[1])
+	fmt.Println(a)
+
+	primes := [6]int{2, 3, 5, 7, 11, 13}
+	fmt.Println(primes)
+}}}
+13. Slice,  []T
+{{{
+	// An array has a fixed size. A slice, on the other hand, is a dynamically-sized, flexible view into the elements of an array
+    // A slice does not store any data, it just describes a section of an underlying array.
+	primes := [6]int{2, 3, 5, 7, 11, 13}  // array
+	var s []int = primes[1:4] // s is a slice
+	fmt.Println(s)
+}}}
+14. 函数是一等公民，可以作为参数传递
+{{{
+// 参数是一个函数，名字为 fn
+func compute(fn func(float64, float64) float64) float64 {
+	return fn(3, 4) //方法体中用到了此函数 fn
+}
+
+func main() {
+	hypot := func(x, y float64) float64 {
+		return math.Sqrt(x*x + y*y)
+	}
+	fmt.Println(hypot(5, 12))
+
+	fmt.Println(compute(hypot)) //13
+	fmt.Println(compute(math.Pow)) // 81
+}
+}}}
+15. 接口。 是隐式的，只要实现了接口中的所有方法，就认为实现了该接口。 所以真正重要的是类型的方法。
+16. 空接口可以表示任何类型， AnyType
+17. 接口的值可以想象成下面这样的一个元组 (value, type), An interface value holds a value of a specific underlying concrete type.
+18. 接口的值(interface value)为空 和 接口中二元组 value (concrete value) 的值为空 是两个概念，对前者的调用会抛空指针，对后者的调用不会抛错。接口的值为空（空接口）
+{{{
+// Note that an interface value that holds a nil concrete value is itself non-nil.
+// A nil interface value holds neither value nor concrete type.
+package main
+
+import "fmt"
+
+type I interface {
+	M()
+}
+
+type T struct {
+	S string
+}
+
+func (t *T) M() {
+	if t == nil {
+		fmt.Println("<nil>")
+		return
+	}
+	fmt.Println(t.S)
+}
+
+func main() {
+	var i I
+
+    // 去掉下面两行，则会抛错（接口的值为空）
+	var t *T
+	i = t  	// 给接口赋值，接口不为空，但是接口中的concrete value 是空的（即元组中的 value 为空）
+	describe(i)
+	i.M()
+
+	i = &T{"hello"}
+	describe(i)
+	i.M()
+}
+
+func describe(i I) {
+	fmt.Printf("(%v, %T)\n", i, i)
+}
+
+}}}
+20.  c 预言理解的一个误区
+{{{
+int *p   // p 是指向 int 的指针。 因为*p 是 int 类型的（对 p 取值后是 int 类型）, 所以 p 是指向 int 类型的指针。
+int* p   // 以前的理解： p 是 int*  类型。
+}}}
+22. 
+
+

@@ -1,13 +1,24 @@
-==== vimwiki ====
+== vimwiki ==
 [[http://thedarnedestthing.com/vimwiki%20cheatsheet | cheatsheet ]]
-
 {{{
 :VWS /java/      # search java
 :lopen           # show all matching 
+
+# Diary
+:,wi                            # open diary index
+:,w,w                           # write diary
+:VimwikiDiaryGenerateLinks      # generate diary index
+
+# key shortcut
+shift + return          # 当前词创建页面
+,wb                     # wiki to browser, 在 vimrc 中设置的快捷键
+,wh                     # wiki to html, 同上
 }}}
 
+    All the vim script to generate html from the .wiki file is under /Users/chenliu/.vim/bundle/vimwiki/autoload/vimwiki
 
-==== ctrl-p ====
+
+== ctrl-p ==
 {{{
 # use cmd+f to invoke
 c-b                 # different search mode. files/mru files/buffer

@@ -1,15 +1,3 @@
-= Contents =
-            - [[#Help|Help]]
-            - [[#macro|macro]]
-            - [[#marks|marks]]
-            - [[#fold|fold]]
-            - [[#emacs for cli|emacs for cli]]
-            - [[#work with cli|work with cli]]
-            - [[#search & replace|search & replace]]
-            - [[#register|register]]
-            - [[#vim chrome|vim chrome]]
-            - [[#useful links|useful links]]
-
 === Help ===
 [[ http://vimdoc.sourceforge.net/htmldoc/ | html doc ]]
 {{{ 
@@ -17,13 +5,19 @@
 }}}
 
 
+=== motion (cursor motion, movement) ===
+{{{
+c-o         # back to previous location
+
+}}}
+
 === macro ===
 {{{ 
 qd          # start recording to register d
-...         # a series of commands
-q           # stop recording
+q           # stop recording.
 @d          # execute your macro
 @@          # execute macro again
+:reg        # see your macro at register d
 }}}
 
 === marks ===
@@ -53,32 +47,38 @@ M-f, M-b            # forword/backword a word (M:alt)
 }}}
 
 
-=== work with cli ===
+=== ex command ===
 {{{
 q:              # open up ex-command history, and then you can choose history and run it.
-@:                      # 重复上次的 ex command
+@:              # 重复上次的 ex command
+
 C-z             # go outside to CLT, fg to bring back.
 fg              # fg 是 job control 中的命令，不加参数表示将上一个 background 的 job 拿到 FrondGround
 !!<cmd>         # 插入命令运行的结果
 !<cmd>          # 临时运行一次 cmd
+
 :=                      # 查看文件总行数
-:set nu                  # show line number
-:set nonu                # hide line number
+:set nu                 # show line number
+:set nonu               # hide line number
+
 :3,6d                   # delete 3~6 line`
 :3,5s/hello/hi          # 3到5行，substitute hello to hi
 :%s/hello/hi/g          # % 表示当前文件，整个文件替换 hello 到 hi
+
 :[range]m{address}      # move the range line to the address
 :3,5m14                 # move 3~6 after 14
 :[range]t{address}      # bring to address
 :6t.                    # 将第六行复制到当前行, t is alias for co
-:3,6w another           # 3~6 line, write to another
-:9,13w >>another        # 将9-13行追加到文件another后面
-:r another              # 将another文件的内容追到到当前文件光标后
+
+:3,6w abc.txt           # 3~6 line, write to abc.txt
+:9,13w >>abc.txt        # 将9-13行追加到文件abc.txt后面
+:r abc                  # 将abc 文件的内容追到到当前文件光标后
+
 :g/pattern/nu           # 搜索所有满足pattern的地方，带行号显示出来
-:.,$p                   # . 代表当前行,$代表末行，p代表print
-:%s                     # % 代表所有行，s代表替换。结合就是全文查找替换
 12Gyy <C-o>p            # 跳到12行复制，然后再跳回来粘贴, <C-o> 来回跳
-:%norm A;               #  在所有行未加添加分号。 %：所有行， norm 运行normal命令 A;:
+:%norm A;               # 在所有行未加添加分号。 %：所有行， norm 运行normal命令A;  
+:%norm .                # 全文执行上次 norm 模式下的命令
+:%norm @q
 高亮选择文本，然后按 :  # 在高亮全区内执行ex。'< 表示选取首行，'> 表示选取尾行
 }}}
 
@@ -104,6 +104,12 @@ q/                                      # view and recall search
 <C-r>=    # 访问表达式寄存器(expression register)
 }}}
 
+
+=== vim little tip===
+{{{
+:%!python json.tool     # json 格式化
+:% norm A;              # 全文所有行 末尾 加上分号
+}}}
 
 === vim chrome ===
 1. ? to trigger helps 

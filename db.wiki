@@ -1,0 +1,77 @@
+== concept ==
+1. index of selectivity. 建索引的字段，字段重复度越小越好； 例如 gender 或者 Y/N 这类字段，用来建索引没有什么意义。
+2. 存储 bool 类型的数据，mysql 中使用 tinyint 即可，tinyint(1)  vs tinyint(4) 的区别是展示1位还是4位，和实际的存储没有关系。
+3. 事务隔离的4 个级别：
+    * Read uncommit 
+    * Read committed
+    * Repeatable reads
+    * Serializable
+
+
+
+
+
+
+
+== sql ==
+{{{
+#1 mysql 有异或操作： XOR
+SELECT name,population,area  FROM world
+WHERE population>250000000 XOR area > 3000000  
+
+#2 ROUND 函数，保留几位小数(例子中保留小数）
+SELECT name, ROUND(population/1000000,2), ROUND(GDP/1000000000, 2) FROM world
+WHERE continent='South America'
+
+#3 LEFT 函数
+LEFT('Hello world', 4) -> 'Hell' 
+
+#4 找出含有非 ASCII 码的列
+SELECT winner,CONVERT(winner USING ASCII)  FROM nobel
+WHERE  winner <> CONVERT(winner USING ASCII)
+
+#5 对于非 ASCII 码的字符匹配，可以考虑用 HEX 函数，获取编码值（不在0-127之间）然后匹配
+SELECT *  FROM nobel
+WHERE HEX(winner) like '%72FC6E%'   -- 分别匹配rün, ü通过查码表得出 hex 值为 FC
+
+----------------------- ! ----------------------
+#6 排序， Show the 1984 winners and subject ordered by subject and winner name; but list Chemistry and Physics last.
+# 将 Chemistry 和 Physics 放到最后。 因为 subject IN ('Chemistry','Physics') 的值是0或者1, 可用来排序。
+SELECT winner, subject
+FROM nobel
+WHERE yr = 1984
+ORDER BY subject IN ('Chemistry', 'Physics'),subject,winner
+
+#7 concat 可以用于拼接字符串, 子查询 select 可以放在很多地方.
+SELECT name, concat(round( (population*100) / 
+                            (SELECT population 
+                              FROM world 
+                              WHERE name = 'Germany'
+                      ), 0)
+              ,'%') 
+FROM world 
+WHERE continent = 'Europe'
+
+----------------------- ? ----------------------
+#8  找出每个洲面积最大的国家
+SELECT continent, name, area 
+FROM world x
+WHERE area >= ALL(SELECT area 
+                  FROM world y
+                  WHERE y.continent = x.continent
+                    AND area > 0
+                  )
+
+----------------------- ? ----------------------
+#9 Some countries have populations more than three times that of any of their neighbours (in the same continent). Give the countries and continents.
+SELECT name, continent 
+FROM world x
+WHERE population > ALL(SELECT population*3 
+                        FROM world y 
+                        WHERE y.continent = x.continent 
+                        AND y.name != x.name
+                      )
+
+
+}}}
+

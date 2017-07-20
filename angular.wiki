@@ -1,4 +1,0 @@
-== Augular ==
-1. made up of Component.
-2. component 由 html 模板 + component class 组成 
-3. 

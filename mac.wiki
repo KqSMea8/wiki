@@ -1,13 +1,14 @@
-=== mac ===
+== mac ==
 1. use key to choose and confirm
    * keyboard -> mission control -> All controls.
    * then select with tab and confirm with space.
 2. 快速存储图片: skitch 截图，cmd+e 
 3. 设置 ctrl + hjkl 为上下左右的方式： https://github.com/kkamdooong/hammerspoon-control-hjkl-to-arrow ， 可以了解 hammerspoon 这个工具，通过 lua 脚本实现强大的系统定制功能。
+
  
-=== iterm ===
+== iterm ==
 {{{
 cmd-d               # split window 
 cmd-shift-d         # split window vertically
-cmd+[,]             # select left/right window,
+md+[,]             # select left/right window,
 }}}

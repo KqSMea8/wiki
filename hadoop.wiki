@@ -143,7 +143,6 @@ scdf-server-yarn 运行之后，启动两类 SB 应用， 一个是 scdf-server-
 3. ui 定制，权限等。
 4. statemachine 问题。整个 deployer-yarn 代码模块很多地方 hardcode 并且缺少文档
 5. scdf 还不够成熟。
-6. 
 
 
 
@@ -179,10 +178,13 @@ spring.yarn.appName(yarn application 名字):  scdstream:app:s101
 
 
 
-=== Dataflow Doc ===
-1. The major concepts of the architecture are Applications, the Data Flow Server, and the target runtime.
-2. 
-
+=== current problem===
+1. Yarn has no network namespace,(no network isolation), all scs-app(sb-app) runing on the same ip.
+   * hsf-provider server.port conflict
+   * multiple scs-app instance on same yarn node, but only displayed one instance in archimedes.
+   * Other unknow problems about current mode, which is mutilple application with same ip different port instead of different app with different port.
+2. Can't use scdf stream dsl (A|B|C) to compose sophisticated stream diagram(such as A ->B,C). But the actual flow can be sophisticated, just the SCDF diagram can't reflct the actual stream flow.
+[[3.]] 
 
 
 

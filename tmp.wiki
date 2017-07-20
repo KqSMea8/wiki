@@ -1,10 +1,8 @@
-[[05708886768]]
-
-
 cwbuy  qif_cgs
 hello1234
 
 1. scdf 部署应用时，可以使用的 runtime platform
+
 2. scdf 的价值，随便两条
 
 
@@ -48,6 +46,13 @@ SpringYarnConfigs 存储 yarn 相关的配置:  yarnClient, yarnAM, yarnContaine
 
 
 
+1. Autoscalers 是否移出 api-server 模块
+2. normandyId 信息不要耦合到instance中，可以放到 normandyAdapator 模块
+3. event 保存快照，immutable,不能更新 
+4. 按机房扩容，不需要每个机房调用一次，可以批量调用？（传入 list）
+5. 扩容时，是否要检查应用正在发布，还是直接提交扩容单（让扩容单自己检查应用的发布情况）
+6. 诺曼底工单结束发消息，若诺曼底不能发，就用 adaptor 来轮训，然后再发出消息
+7. TMQ 替代 deletionTime，tmq 可以半小时后发出消息。
 
 
 
@@ -55,32 +60,67 @@ SpringYarnConfigs 存储 yarn 相关的配置:  yarnClient, yarnAM, yarnContaine
 
 
 
+container刚创建：
+deletionTime: null
+CreationScheduled:N
+Initialized:N
+Running:N
+DestructionScheduled:N
 
+controller:
+1. invoke scale out (deletionTime==null && CreateScheduled == N)
+2. update container api:
+    deletionTime: null
+    CreationScheduled:Y
+    Initialized:UNK
+    Running:N
+    DestructionScheduled:N
+    ip: null
 
+1. callback(message):
+    1. containerId  
+    if(ip==null),set Container.init=N,  Container.CreationScheduled: N 
+    else  set container.ip
+    check ais interface for container init, running
+      if(init==Y) set Container.init = Y
+      if(init==N) set Container.init=N,  Container.CreationScheduled: N 
+        3.set Container.running=runing
+        status:  
+        deletionTime: null
+        CreationScheduled:Y
+        Initialized:Y
+        Running:N/Y
+        DestructionScheduled:N
 
+----------------------------------------------------
+container delete：
+deletionTime:  30 min later
+CreationScheduled:N/Y
+Initialized:N/Y
+Running:N/Y
+DestructionScheduled:N
+ip:N/Y
 
-
-
-
-
-5.18 周四 (8:20 -- 11:45) 上海浦东 --> 大阪关西国际机场
-5.22 周一 (17:00 --19:10) 关西国际 --> 上海浦东
-
-5.18:  关西机场直接到京都。 住京都
-5.19:  京都一天。 住京都（联系包车？）
-5.20:  京都一天。 下午5：00 左右前往大阪，住大阪。（联系包车？）
-5.21:  大阪-> 奈良-> 大阪， 奈良半天或者一天,晚上回大阪，住大阪。(联系包车？）
-5.22:  大阪一天。 下午3点左右前往机场。
-
-
-
-
-
-
-1. header nav 框加宽， 字大一号。
-2. 
-
-
-
+controller:
+1. invoke scale in  (deleteionTime != null && DestruS = N )
+    if(ip==null)  delete container 
+    else 
+        invoke ais interface  to container termination
+        set container.DestructionSchduled=Y  container.Init=UNK
+        
+2. callback(message):
+    1. containerId
+    2. check ais interfiace for container init, running 
+     if(init==Y) set container.Init=Y,  DestrunctionScheduler=N
+     if(init==N) invoke apiserver to delete container
+     if(running=y) set container.Running=Y
+        
+        
+        
+        
+1. status_replicas :  所有 container， 不论  condition
+2. status_runnning_replicas:  只有 running condition 的 container
+3. autoscaler 中的 current_replicas 是 running 的 replica
+4. autoscaler 中的 desired_replicas 是当前计算值，可能不符合 scale 规则，但是会记录。 所以这个值和rs 中的 desired 值可能不同。
 
 

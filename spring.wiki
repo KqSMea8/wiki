@@ -1,4 +1,4 @@
-= IOC =
+== IOC ==
 ==== BeanFactory & ApplicationContext ====
     可以认为 BeanFactory 是 Spring 框架的基础设施，面向 Spring 本身；而 ApplicationContext 面向Spring 框架的使用人员。
     
@@ -48,7 +48,7 @@ _对于容器级别的后处理器。 BeanFactory 需要手动注入（调用add
 
 
 
-= AOP =
+== AOP ==
     In plain English terms, AOP allows to specify “where” and “what”: where in your code you’d like to do what. “where” is called a “PointCut” (corresponding well to “crosscutting”). The combination of “where” and “what” is called an “Aspect”(do not know why it is named “Aspect”).
     
     {{local:./images/spring_aop_terminology.png ||style="width:550px;height:320px;"}}
@@ -65,7 +65,7 @@ _对于容器级别的后处理器。 BeanFactory 需要手动注入（调用add
    * 若 class 没有实现 interface，则使用 cglib 代理
    * 若要强制都使用 cglib 来动态代理，则需要配置属性: <aop:config proxy-target-class="true"/>
 
-= Gotchas =
+== Gotchas ==
     There are all kinds of "gotcha’s" that can occur with this type of under-the-covers implementation of which you should be aware
     
 * [[http://docs.spring.io/spring/docs/3.0.x/spring-framework-reference/html/aop.html#aop-at-aspectj|Aspect can't advise other aspect]]

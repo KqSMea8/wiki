@@ -6,11 +6,17 @@
 
 [[vim]]
 
+[[db]]
+
 [[tools]]
+
+[[docker]]
 
 [[english]]
 
 [[reading]]
 
 [[tmp]]
+
+[[abc]]
 

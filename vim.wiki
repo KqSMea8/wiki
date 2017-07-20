@@ -4,5 +4,3 @@
 
 [[vim_practicle]]
 
-[[vim_wiki]]
-
