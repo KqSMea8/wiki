@@ -1,0 +1,6 @@
+== Netty in Action ==
+    *1.* 异步 API 有两种形式：Callback 和 Futures。 两种方式的写法稍有不同。
+    
+    *2.* Channel 和 Buffer 是 NIO 中的两个核心概念。Channels are analogous to streams in the original I/O package. All data that goes anywhere (or comes from anywhere) must pass through a Channel object. A Buffer is essentially a container object. All data that is sent to a channel must first be placed in a buffer; likewise, any data that is read from a channel is read into a buffer。 不会 *直接* 读/写数据到 channel
+    
+    *3. * fd,w

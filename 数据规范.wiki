@@ -1,0 +1,8 @@
+1. 数据分层
+  * ODS: Operation data store, 原始数据, 最为 DW 的一个数据准备区
+  * CDM: Common Data Model 数据中间层
+        * DWD: Data Warehouse Detail  数据仓库明细
+        * DWS：Data Warehouse Summary 数据仓库汇总
+  * ADS: Application Data Service, 面向应用的数据服务层
+
+2. d

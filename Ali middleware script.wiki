@@ -1,0 +1,5 @@
+{{{
+# grep the eagle-eye 23,24,25 位为0 的traceId
+cat hsf.log | grep '_eagleeye_trace_id'  | cut -d, -f2 | cut -d= -f2 | grep -E '^.{22}(0){2}'
+
+}}}

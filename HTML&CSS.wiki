@@ -1,0 +1,12 @@
+== CSS ==
+
+| Combinators | Select                                       |
+|-------------|----------------------------------------------|
+| A,B         | multiple selector, comma is just a seperator |
+| A B         | (descendent selector) 后代, 直接或间接后代   |
+| A->B        | (child selector) 直接后代                    |
+| A+B         | (adjacent sibling selector) 紧跟着的兄弟元素 |
+| A~B         | (general sibling selector) 所有的兄弟元素    |
+
+
+== HTML ==

@@ -1,0 +1,118 @@
+=== wdk_tms_order_status_topic ===
+{{{
+{
+    "bizOrderType":2,
+        "customerAddress":"上海上海市闵行区七宝镇七莘路2855弄77号201",
+        "customerName":"王小姐",
+        "customerPhone":"18918830472",
+        "customerPoiAddress":"七莘路2855弄77号201",
+        "delivererId":12237,
+        "deliveryDockCode":"8014",
+        "externalSystemCode":"LOC_ROUTE",
+        "fulfillOrderId":"48139644511841",
+        "orderCode":"DO25656177",
+        "orderGmtCreate":1519699940000,
+        "orderRemark":"",
+        "orderSkuDTOs":[
+        {
+            "sellQuantity":1,
+            "sellUnit":"盒",
+            "skuBarcode":"6971270920030",
+            "skuCode":"103506002",
+            "skuName":"秘鲁红地球红提 500g",
+            "status":30,
+            "statusDetail":"1502",
+            "subFulfillOrderId":"48139644611841"
+        },
+        {
+            "sellQuantity":2,
+            "sellUnit":"袋",
+            "skuBarcode":"4891913100064",
+            "skuCode":"040500403140",
+            "skuName":"湾仔码头黑芝麻汤圆",
+            "status":30,
+            "statusDetail":"1502",
+            "subFulfillOrderId":"48139644711841"
+        },
+        {
+            "sellQuantity":1,
+            "sellUnit":"盒",
+            "skuBarcode":"6926415148677",
+            "skuCode":"090200900022",
+            "skuName":"佳沃智利蓝莓125g",
+            "status":30,
+            "statusDetail":"1502",
+            "subFulfillOrderId":"48139644811841"
+        },
+        {
+            "sellQuantity":1,
+            "sellUnit":"盒",
+            "skuBarcode":"2005968",
+            "skuCode":"105270046",
+            "skuName":"海南牛奶枣 6个装",
+            "status":30,
+            "statusDetail":"1502",
+            "subFulfillOrderId":"48139644911841"
+        }
+    ],
+    "orderType":"DO",
+    "status":30,
+    "statusDetail":"1502",
+    "subBizOrderType":0,
+    "taskCode":"DT25300007",
+    "taskStatus":30,
+    "taskType":"DT",
+    "warehouseCode":"8014"
+}
+}}}
+
+
+
+=== wdk_tms_batch_status_topic ===
+{{{
+{
+     "batch": {
+         "areaName": "\u5357\u6e56\u516c\u56ed",
+         "arriveStatus": 2,
+         "assignedTime": 1517992067000,
+         "batchAssignType": 3,
+         "batchAttr": 1,
+         "batchDistance": 1775.0,
+         "batchGmtCreate": 1517842602000,
+         "batchId": 20183090205225641,
+         "batchName": "171221-\u5357\u6e56\u516c\u56ed-19:30-20:00-38\u5206\u949f-2",
+         "batchPathOrder": "201802052256419762,201802052256419763,201802052256419761",
+         "bizOrderType": 3,
+         "delivererId": 113038,
+         "delivererName": "jianzhi011",
+         "delivererPhone": "18682809766",
+         "deliveryDockCode": "33571004",
+         "deliveryOrderCount": 3,
+         "deliveryRangeName": "\u5357\u6e56\u516c\u56ed",
+         "earliestArriveTime": 1517842602000,
+         "firstArriveDockTime": 1517842602000,
+         "gmtCreate": 1517842602000,
+         "gmtModified": 1517992066000,
+         "id": 1904923,
+         "latestArriveTime": 1517844402000,
+         "locationStatus": 10,
+         "packageId": "1,2,3",
+         "packageIds": [
+             "1",
+             "2",
+             "3"
+         ],
+         "packageNumber": 3,
+         "packagedTime": 1517842602000,
+         "pickedTime": 1517842602000,
+         "remainedTime": -2461,
+         "status": 3,
+         "storageCode": "1",
+         "subBizOrderType": 0,
+         "unCanceledDeliveryOrderCount": 2,
+         "warehouseCode": "33571004"
+    },
+     "eventType": 3
+ }
+
+}}}

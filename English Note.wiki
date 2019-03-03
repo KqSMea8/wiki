@@ -1,0 +1,88 @@
+== QUOTE ==
+
+    1. Code is a creative endeavor. You need to be in the right mindset to create high-quality code. Can't be measured by hours.
+    
+    2. There are global options and local (per-wiki) options available to *tune(调试，调优)* Vimwiki
+    
+    3. So steel yourself against the forces of chaos and confusion. Never lose faith that there will come a time when order and logic shine like the sun on a clear new day.
+    
+    4. often, figures have captions that float with them. (figure:插画， captions：字幕)
+    
+    5. 美国西部的牛仔们，会将死去的马儿留在原地，但是仍然会扛着马鞍长途跋涉，穿越一望无垠的沙漠。因为马儿是消耗品，而马鞍却是与人体融合在一起的「知己」。我们要有这样的观念:现在，电脑是消耗品，键盘却是传递感情，陪伴我们一生的「挚友」。
+
+
+== WORDS ==
+    1. stale cache:    过期的 cache
+    2. imbricated Map:  折叠的 map，有好几层的 map。  eg.  Map<String, Map<String, Map<String, Product>>>
+    3. peripheral: 外围的，计算机外设
+    4. IDE： The Integrated Drive Electronics interface is the most popular way to connect a hard drive to a PC
+    5. motherboard: 主板.   a motherboard containing the CPU or microprocessor, the memory and a number of slots for the ISA or PCI peripheral controllers
+    6. clock tick: 时钟周期   CPU clock tick
+    7. serial port: 串行端口。
+    8. idempotent: 幂等的   /aɪ'dɛmpətənt/
+    9. *clobber* In software engineering, clobbering a file or computer memory is overwriting its contents.
+    10. ternary expression 三目运算表达式
+    11. denim short: 牛仔裤
+    12. promotion: 晋升； 促销
+    13. cognitive: 认知的
+    14. stay tuned: 敬请关注
+    15. Shebang: 全部家当，所有东西
+    16. *coarse-grained*: 粗粒度的； *fine-grained*:细粒度的
+    17. inherently: 天生的，固有的
+    18. delicate: 脆弱的，易碎的
+    19. colloquially: 通俗讲，俗称 
+    20. idemponent: 幂等 
+    21. commodity hardware: 廉价硬件, commodity:商品，货物
+    22. multi-tenancy: 多租户， tenancy：租户
+    23. reiterate: 重申
+	24. convolute: 回旋，盘旋。 adj & v
+	25. mitigate: 使缓和，减轻
+	26. mishap: 灾祸，事故 (mis-happen ，不该发生的). Exceptions are unusual mishaps that interfere with the normal flow of a program
+	27. trivial： 琐碎的，不重要的. Don't get impatient about trivial thing like that 
+	28. flourish: 繁荣昌盛
+	29. reminiscent： 暗示，使人想起
+	30. diameter: 直径
+    31. stem the tide : 逆流而上
+    32. slew： 沼泽地，泥潭。 a whole slew of global functions
+    33. caveat: 警告，预警
+    34. Cartesian product 笛卡尔积
+    35. controversial: 有争议的
+    36. malign: 诽谤,中伤
+    37. brutal: 野蛮的，不讲理的。 大力水手中的反派名字
+    38. crash: 碰撞； 速成的。  crash course 速成班
+    39. *penultimate* ：倒数第二个。   so -1 is the last element, -2 is the penultimate element of the list, and so forth.
+    40. myriad: 无数的
+    41. invoice: 发票
+    42. rudimentafry: 基础的。using very basic, rudimentary Python
+    43. pristine: 原始状态的。  
+    44. hilarious: 十分滑稽的
+    45. provoking: 令人愤怒的，挑衅的。  rage-provoking 愤怒的挑衅
+    46. fortress: 要塞。  My home office is a fortress of productivity. 
+    47. impromptu: 即兴的,事先无准备的。 impromptu meetings 
+    48. outskirt: 外围地区，市郊
+    49. loathe: 憎恶，讨厌。I loathe the I-did-it-all-by-myself heroic myth mongering
+    50. mongering: 买卖
+    51. granularity： 粒度。   Lock Granularity 数据库中【锁的粒度】
+    52. turbocharge: 涡轮发动机。a 350 horse power turbocharge four cylinder engine  350马力涡轮增压四缸发动机.   cylinder: 圆柱体，汽缸
+    53. better yet: 更好的做法是， 更好的
+    54. contention: 争夺，争论。 lock contention 锁争夺
+    55. raise the bar: 跟上一层楼，再提高一层
+    56. orthogonality: 正交性,正交状态.  orthogonal 直角的，正交的
+    57. trawl: 拖网捕鱼、查阅。 But trawling through Javadoc
+    58. surrogate: 替换、代理.  surrogate motherhood:代孕，  surrogate keys: 代理主键（自增的主键）
+    59. summon: 召唤、招集。 the pope summoned Anselm to Rome. 教皇将 Anselm 召唤到罗马
+    60. qualitative (brown eye color) and quantitative (20cm long)  定性的 和 定量的
+    61. trivial: 琐碎的
+    62. cumbersome： 沉重的
+    63. indispensable: 必须的
+    64. delve: 挖，钻研，探究
+    65. tangible: 有形资产； 有形的，切实的
+    66. uncontaminated: 未被污染的
+    67. adequte: 足够的，能胜任的
+    68. Customer Obsession: 客户至上。   obsession：痴迷，着迷
+    69. imperative: 命令的、指令的   imperative language :指令式语言
+    70. mere consequence of: 仅仅的结果，单纯的结果。   downplays its range: 低估了它的作用。  But thinking of passing code to methods as a mere consequence of Streams downplays its range of uses within Java 8
+    71. nonintrusively: 非侵入的； intrusive，侵入
+    72. 
+
+

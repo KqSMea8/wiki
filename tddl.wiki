@@ -1,0 +1,7 @@
+
+{{{
+# 测试环境的数据库可以直连：
+http://gitlab.alibaba-inc.com/middleware/tddl5-wiki/wikis/Corona-Quick-Start-For-DBA
+
+
+}}}

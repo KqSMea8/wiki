@@ -1,0 +1,7 @@
+{{{
+cmd+e           # navigate recent used file
+cmd+b           # brows it.
+
+cmd+alt+b       # go to impl
+cmd+u           # go to interface
+}}}

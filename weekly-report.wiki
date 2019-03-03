@@ -1,0 +1,89 @@
+
+-- 11.14
+1. 周二活动圈人出问题，活动漏人。 紧急修复，使用自己的mysql数据来捞取人员。
+2. 灯塔修改接入工作流，通知到总部运营人员
+3. BI数据，和布吉对齐，对应lark文档
+4. 制作两张拉新报表，转化率报表；新人报表； 之前是费用报表
+
+并行：
+1. 活动圈人bug修复、灯塔二期运力拓展、灯塔修改通知、看板运力相关数据对接、出海项目改造点梳理、工作统计项目、离线数据整理
+
+
+
+-- 11.22
+1. 灯塔banner页面显示，关卡一，title却在关卡三中
+2. 配送员工作统计，换底层数据，换接口
+3. 灯塔没开始踩点之前，换站点则不能继续踩点，查不到项目
+4. 拉新报表按时段统计链接访问次数
+5. 活动需求
+
+
+-- 11.26
+1. 活动无法停止问题，业务方反馈，无法停止生效中的活动
+2. 灯塔数据问题，加入过培训，但是不能派单，修改培训中状态
+
+
+-- 12.5
+1. 灯塔停留天数数据
+2. 活动id圈人上线
+3. 工作统计，今日单量缺少逆向单
+4. 工作统计，月度数据不准
+5. 灯塔开关演练，12.7  10：30 --10：40
+
+
+-- 灯塔bug
+1. 众包灯塔发消息有钱，全职第二次加入发消息有钱
+2. 新号注册，直接剔除，会受到三关的所有奖励消息
+3. 
+
+
+-- 12.25
+1. 灯塔单量服务问题，导致触发奖励
+2. 工作统计去除对交易的依赖
+3. redbull 和 bartender 升级7u
+
+
+---培训
+能够独立变化的模块越多，你的资产越多;  =>  越写越快
+不能独立变化的东西越多，你的债务越多；=> 越写越慢
+----
+好的模型可以积累为组织资产，不好的模型积淀为组织债务。
+---
+建模过程就是猜想与反驳过程； 可以被证伪的东西才能发展
+演化的观点是建模过程的基本心智
+建模过程就是知识不断积累的过程
+---
+领域建模是业务导向的。是发生在业务领域的，和业务讨论出来的
+---
+
+-- 2019-01-18
+1. odps table transfer
+2. inviter homepage first trigger error bug
+
+
+-- 2019-01-25
+1. campaign reward not trigger problem, cleanning task job failed. finding rootcause: the fee service is not available in pre-env.
+2. lighthouse priviledge control, use infra interface but they didn't expose authorized dock.
+3. train progress page error diagnose, rootCause： train setup page didn't pass course sort to backend, so we don't know the course sort.
+4. odps table transfer, from hm_tech to hm_ods
+5. d:q
+6. 
+
+
+
+
+
+
+
+
+
+
+
+能力刻画：
+1. 订单量，考核时间之前完成、考核时间之后完成。
+
+
+
+
+
+

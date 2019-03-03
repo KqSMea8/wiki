@@ -1,0 +1,88 @@
+* cmd + whitespace : trigger finished.
+
+
+=== 2017-10-16 ~ 20 Monday ~ Friday ===
+* [X] Make the cpu-usage chart more stable (no more Fail null diaplay)
+* [X] Add cpu-usage statistics on autoscale dashboard
+* [X] Sunfire api requirement discuss
+* [X] To read [[https://www.html5rocks.com/en/tutorials/internals/howbrowserswork/ | web browser internal ]]
+* [X] To read [[https://developer.chrome.com/devtools |chrome dev tool]]
+
+
+
+=== 2017-10-23 ~ 27 Monday ~ Friday ===
+* [X] Add cpu-usage statistics on autoscale dashboard
+* [X] Add cpu-usage statistics page for all app
+* [X] Add cpu-usage statistics 7 day avg and 7 day-peak avg
+
+=== 2017-10-30 ~ 11-3 Monday ~ Friday ===
+
+* [X] url redirect, remove serviceGroupName from the autoscale url.
+
+
+=== 2017-10-20 ~ 11-24 Monday ~ Friday ===
+* [X] alimetrics-spring-boot-starter 使用新的 eagle-eye-sdk，暴露相应的 hsf,jvm 等指标的采集 endpoint
+* [X] 升级 spring-boot-starter-dependencies，仲裁新的 alimetrics-starter 以及 eagle-eye 相关的包
+* [X] sunfire API 重构，从 persister-read 挪到 AIS， 添加获取租户下所有应用的 api
+* [X] cpu 计算方式重构，计算精度精确到 分钟级别。（因为原始数据就是分钟级别的精度）
+
+
+=== 2017-11-27 ~ 11-1 Monday ~ Friday ===
+* [X]  alimetrics-starter endpoints match sunfire requirement
+* [X]  testing alimetrics-starter with sunfireguy
+* [ ]  fix kanban tasks about the dashboard display issues and requirement such as url-broken, add mode display, fix data-format for instance count.
+
+=== 2017-12-11 ~ 12-15 Monday ~ Friday ===
+* [X] 熟悉 ae-url-redirect
+* [X] 添加 peak 数据到 dashboard
+* [X] 排插 metrics 锁问题
+* [X] ae-url-redirect 安全漏洞修复
+
+
+=== 2018-2-23 ~ 2018-2-24 ===
+* [X] 团队代码规范，如何实施，如何验证
+* [X] o2o 调度运单数据不准的问题，新方案的 fix
+
+
+=== 2018-3-19 周 ===
+* [ ] 修改模型，查询条件统一到 PoolTag 上
+* [ ] 修复所有老的 TestCase， 添加新模型 TestCase
+* [ ] 实时看板交互评审
+* [ ] 修复 Exception 切面，参数异常捕捉
+* [ ] 实时看板项目计划甘特图
+* [ ] 枚举类型 mybatis-handler
+
+
+
+
+
+
+
+* [O]  code-review meeting
+        * [X] api包结构。
+        * [X] wdk-infrastructure 代码参考(api 包)
+            * [X] result中的方法命名, success, fail
+            * [X] value 强校验序列化
+            * [X] 异常是否有必要定义在 api 包
+        * [X] service 应用结构、web 应用结构。
+        * [X] RPC 接口的返回值，异常处理.
+        * [X] RESTful http 接口的返回值，异常处理.
+        * [X] 关于 DDD 的一些概念的类，如 ValueObject，Entity，Arregate,Event等，可以抽出做公共包
+        * [X] log日志书写
+        * [X] builder 方法，builder 生成工具
+        * [X] mybatis统一处理 enum
+        * [X] 测试用例 BDD 
+        * [X] ace jump;   request mappper;   .gitignore;    db navigator
+        * [ ] best-practice 分享，如 lombok，公共日志包等
+
+
+
+1. [X] 出勤汇总页面变更站点后数据没有动， 看看是不是站点写死了。@玉英  
+2. [X] 数据分页后要排序  @玉英 
+3. [ ] 站点目前下拉框需要调整一下，可以支持模糊搜索。 @玉英
+4. [ ] excel 表格下载格式错误问题  @李保中  
+5. [ ] 配送中订单，添加下载功能 @李保中
+6. [ ] 全职总人数、三方总人数、兼职总人数、众包总人数，这几个下载里面，去掉【配送中订单】和【已完成订单】
+7. [ ]  总人数和总人效 @纳信
+8. [ ] 众包今日出勤人数，和点开实际页面后不一样 dockCode=8005   @纳信
+

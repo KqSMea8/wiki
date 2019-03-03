@@ -1,0 +1,98 @@
+== Commands  ==
+1. [[http://www.tldp.org/LDP/abs/html/io-redirection.html |I/O redirect]]
+{{{
+ls /abc > ls_output 2>&1        # 重定向 stderr 和 stdout 到同一个文件 ls_output
+}}}
+2. 批量文件操作
+{{{
+# find 和 xargs 连用时，养成习惯 -print0 | xargs -0 ，表示用NUL（\u00）做文件分隔，这样就能处理特殊文件名了。
+find . -name "*.md" -type f  -print0 | xargs -0 -I {} mv {} {}_bak     # 批量备份某种文件
+for f in $(find . -name "*_bak" -type f); mv "$f" "${f%_bak}"          # convert back.
+find . -name "*_bak" -print0 | xargs -0 -I {} mv {} $(echo {}|sed 's/_bak//g')   # Why this can NOT work?
+
+
+find . -name "*.md" -print0 | xargs -0 -I {} cp -p {} /target_path/     # 批量拷贝
+
+find . -name "*.md" -print0 | xargs -0 sed 's/foo/bar/g'                # 批量替换文件中的 foo 到 bar
+find . -name "*.md" -print0 | xargs -0 -i '' 's/foo/bar/g'              # mac 中需要加上-i参数，参数值置空标识不备份
+}}}
+3. RPM
+{{{
+# 查找 ssh-copy-id 是哪个rpm 安装的
+which ssh-copy-id                   # /usr/bin/ssh-copy-id
+rpm -qf /usr/bin/ssh-copy-id        # openssh-clients-5.3p1-118.1.el6_8.x86_64
+rpm install openssh-clients         # 安装这个 rpm 包，去掉后面的版本等信息
+}}}
+4. 默认开机开启服务
+{{{
+sudo chkconfig --levels 235 mysqld on
+sudo chkconfig --levels 235 nginx on
+sudo chkconfig --levels 235 php-fpm on
+}}}
+5. find 查找文件，不要打印 Permission denied
+{{{
+find / -name 'hadoop_data' -type d  2>&1 | grep -v "Permission"
+}}}
+6. 整个命令具有 sudo 权限
+{{{
+sudo -u admin sh -c 'echo "hi" > brush-error-data'   # 单引号内的 shell 命令使用 admin 执行。
+}}}
+7. 常用
+{{{
+pgm -A $(autoget ae-data-russia-screen-b_hz_host)  "ls -l /home/admin"
+# admin 批量执行
+pgm -A $(autoget ae-data-russia-screen-b_hz_host) 'sudo -u admin sh -c "rm -rf * /home/admin/ae-data-russia-screen-b/logs/*" '
+}}}
+8. 中文乱码
+{{{
+export LC_ALL=zh_CN.GBK
+export LC_ALL=en_US-UTF-8
+}}}
+9. grep 
+{{{
+find . -name "pom.xml"                    # find Recursively
+find . -name "pom.xml" | xargs grep -A1 "uic.modules.cache"
+
+grep -nr "my_word" .                      # 在文件夹中查找某个单词 -n Number, -r Recursive  . from The current dir
+grep -A 3 "spring-contxt" pom.xml         # 显示 word 这行以及之后三行，A after, B before
+
+grep my_file.xml  *.jar                   # jar 中查找某个文件。
+find *.jar -exec zipgrep "my_word" {} \;  # jar 中查找内容
+                                          # zipgrep一次只能读入一行参数。 -exec {} ； 一次只读入一行参数
+find *.jar | xargs -n1 zipgrep "my_word"  # -n1, 每次读取一行
+# 根据word找到文件，然后再根据文件找jar
+find *.jar | xargs zipgrep "my_word"      # Wrong!!  因为 xargs 会把 input 合并，使得 zipgrep 一次读入多行
+find *.jar -exec zipgrep "my_word" {} +   # Wrong!!  同 xargs
+
+
+#eg. 在 metrics 相关的 jar 中找包含字符串'metrics-' 的 class 文件
+find metrics*.jar | xargs -n1 zipgrep "metrics-" | grep class
+
+grep -E 'foo|bar'                         # grep OR
+grep -E 'foo.*bar'                        # grep AND
+grep -v -E 'foo|bar'                      # grep nor a and b
+
+}}}
+
+10. CURL 
+{{{
+curl -v baidu.com           #  verbose 输出，可以看到请求头、响应头等
+
+-X POST     # http method
+-d body     # http body
+-b cookiejar    # cookie jar is a txt file hold cookies
+-c cookiejar    # create the cookiejar
+
+
+
+curl -v localhost:7001 -b "WDK_SECRET=d5beca2ec9777bb2705f05ab4e40d058;WDKSESSID=vGLLc2yF8ufbprJbEF522WmlEEg"
+curl -v localhost:7001/capacity/queryCapacityList -G -d 'workDockCode=1000513336&pageSize=20'       # send -d data via GET
+curl -v localhost:7001 -b "WDK_SECRET=d5beca2ec9777bb2705f05ab4e40d058;WDKSESSID=vGLLc2yF8ufbprJbEF522WmlEEg"
+:q
+:q
+
+
+# -u 帐密校验
+curl -u admin:admin -X GET "http://localhost:8080/confluence/rest/api/space/ds/content/page?limit=5" | python -mjson.tool
+
+}}}

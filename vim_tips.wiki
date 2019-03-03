@@ -13,11 +13,13 @@ c-o         # back to previous location
 
 === macro ===
 {{{ 
-qd          # start recording to register d
+qa          # start recording to register a
 q           # stop recording.
-@d          # execute your macro
+@a          # execute your macro
 @@          # execute macro again
-:reg        # see your macro at register d
+:reg        # see your macro at register a
+
+:'<,'> nor @a   # 在选中的行上执行宏 a
 }}}
 
 === marks ===
@@ -31,10 +33,68 @@ mx          # set mark to x
 === fold ===
 {{{
 :h fold     # see fold help
-zo, zO      # open fold/ recursively
+zo, zO      # open fold/ recursively ,   charactor 'z' just like a folded note
 zc, zC      # close fold/ recursively
 }}}
 
+
+=== window ===
+{{{
+c-w j/i/j/k     # move between window
+c-w v/s         # vertical/horizontal split
+c-w c           # close current window
+c-w o           # close all other window except current
+c-w r           # rotate window
+
+c-ww            # 窗口循环切换
+
+# 调整窗口大小
+c-w +/-         # 水平窗口高度增加/减少
+c-w >/<         # 竖直窗口宽度增加，减少
+20c-w >         # 拓宽20列 
+
+c-w =           # 所有窗口等宽
+}}}
+
+=== tab ===
+{{{
+# 不过有了 tmux 之后，可以忽略掉 vim 的 tab 了。 
+
+:tabe      # new tab. (for tem editing, without change current window display)
+:tabe %    # open new tab, show current file
+:Te        # open new tab, show current dir
+
+gt, gT     # go to next/previous tab
+3gt        # go to tab3 
+c-w T      # move current window to a new tab.  c-w is window chose
+
+:tabm +3   # move tab 3 place to right
+}}}
+
+
+=== buffer ===
+{{{
+
+:ls         # 列出当前缓冲区
+------
+1 #h   ".vim/vimrcs/basic.vim"        line 355
+2  h   "~/buffer"                     line 1
+3 %a + "data.csv"                     line 1
+------
+#  % 表示当前哪个文件在窗口可见
+#  # 表示轮换文件，可用 C-^ 来轮换
+#  a 表示 active， h 表示 hide
+
+:bn,bp          # next/previous buffer
+:b3             # 跳到3号 buffer，每个 buffer 有编号
+:b keyword tab  #'缓存关键字，然后 tab 选择'
+]b,[b           # normal mode next/previous buffer
+
+
+
+
+
+}}}
 
 
 === emacs for cli ===
@@ -104,11 +164,52 @@ q/                                      # view and recall search
 <C-r>=    # 访问表达式寄存器(expression register)
 }}}
 
+=== vim 多文件、缓冲区 ===
+{{{
+:ls 查看缓冲区的所有文件
+# 其中%表示当前文件、# 表示轮换文件。 可以用 C-^ 来回切换。
+# 文件前有数字编号，可用 b {number} 快速定位
+:bn # 下一文件
+:bp # 上一文件
+:bufdo bd   # 快速关闭所有 buf
+
+:args ~/aeuic/**/pom.xml  # 打开所有 aeuic下的 pom 到缓冲区
+
+:wa(ll)     # 保存所有 buf 的修改
+}}}
+
+
+=== vim 多窗口、多tag ===
+{{{
+# 多个窗口共享 buf
+c-w v           # 新启垂直窗口, 可以用 :e {filepath} 开始编辑新的文件
+c-w j,i,j,k     # 窗口之间切换
+c-w o           # 只保留当前窗口
+
+# 多个 tab 也共享 buf； 看来 buf 是 vim 启动后，全局共享的
+:tabedit {filename}   # 新启一个 tab（一个 tab 是多个窗口的容器）
+:gt,gT                # tab 切换
+
+# 总结，以后item 中只要给 vim 开一个 tab 就够啦。
+}}}
+
+
+=== vim diff ===
+{{{
+dp             diffput: puts changes under the cursor into the other file
+                        making them identical (thus removing the diff).
+do             diffget: (o => obtain). The change under the cursor is replaced
+                        by the content of the other file making them identical.
+
+]c             Jump to the next diff
+[c             Jump to the previous diff
+}}}
 
 === vim little tip===
 {{{
-:%!python json.tool     # json 格式化
-:% norm A;              # 全文所有行 末尾 加上分号
+:%! python -mjson.tool      # mjson module-json 格式化. % 全文；  ！执行命令 
+:% norm A;                  # 全文所有行 末尾 加上分号
+
 }}}
 
 === vim chrome ===

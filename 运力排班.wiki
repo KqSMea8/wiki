@@ -1,0 +1,26 @@
+1. 当天排班修改
+2. 
+
+日单量 sql:
+select deliveror_id, total_order from(
+    SELECT a.deliveror_id,a.total_order,b.labor_time,a.ds from 
+	(SELECT deliveror_id,ds,sum(delivered_cnt) as total_order from bt_tabulate_data a group by deliveror_id,ds) a
+	JOIN bt_tabulate_data_by_capacity b
+	ON a.deliveror_id =b.deliveror_id 
+	and a.ds>20180401
+	and a.ds=b.ds
+	and b.labor_time >3600 * 3
+    where a.deliveror_id in (17144,5838)
+    ) x 
+where 4>
+( select count(1) from 
+   (SELECT a.deliveror_id,a.total_order,b.labor_time,a.ds from 
+	(SELECT deliveror_id,ds,sum(delivered_cnt) as total_order from bt_tabulate_data a group by deliveror_id,ds) a
+	JOIN bt_tabulate_data_by_capacity b
+	ON a.deliveror_id =b.deliveror_id 
+	and a.ds>20180401
+	and a.ds=b.ds
+	and b.labor_time >3600 * 3
+    where a.deliveror_id in (17144,5838) ) x2
+ where x.total_order < x2.total_order and x.deliveror_id = x2.deliveror_id)
+order by x.total_order

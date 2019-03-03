@@ -1,0 +1,5 @@
+
+=== avoid null ===
+1. Optional<T> is a way of replacing a nullable T reference with a non-null value. An Optional may either contain a non-null T reference (in which case we say the reference is "present"), or it may contain nothing (in which case we say the reference is "absent"). It is never said to "contain null." 因为 "contains null" 的表述有歧义,到底是没有，还是它有值但是为 null
+2. guava vs. apache https://stackoverflow.com/questions/4542550/what-are-the-big-improvements-between-guava-and-apache-equivalent-libraries
+3. 

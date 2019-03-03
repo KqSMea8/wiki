@@ -33,7 +33,14 @@ sudo chkconfig --levels 235 php-fpm on
 {{{
 find / -name 'hadoop_data' -type d  2>&1 | grep -v "Permission"
 }}}
-6. fdsafasd
+6. 整个命令具有 sudo 权限
 {{{
-ok
+sudo -u admin sh -c 'echo "hi" > brush-error-data'   # 单引号内的 shell 命令使用 admin 执行。
+}}}
+
+7. 常用
+{{{
+pgm -A $(autoget ae-data-russia-screen-b_hz_host)  "ls -l /home/admin"
+# admin 批量执行
+pgm -A $(autoget ae-data-russia-screen-b_hz_host) 'sudo -u admin sh -c "rm -rf * /home/admin/ae-data-russia-screen-b/logs/*" '
 }}}

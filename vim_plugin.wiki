@@ -10,17 +10,35 @@
 :VimwikiDiaryGenerateLinks      # generate diary index
 
 # key shortcut
-shift + return          # 当前词创建页面
+Enter                   # 在单词上回车直接创建新 wiki，再回车就直接进入新 wiki
 ,wb                     # wiki to browser, 在 vimrc 中设置的快捷键
 ,wh                     # wiki to html, 同上
-}}}
 
-    All the vim script to generate html from the .wiki file is under /Users/chenliu/.vim/bundle/vimwiki/autoload/vimwiki
+
+
+# vimwiki settings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => vimwiki
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" See :h vimwiki-options
+let g:vimwiki_list = [{'path': '~/vimwiki',
+    \    'path_html': '~/vimwiki_html',
+    \    'template_path': '~/vimwiki/template',
+    \    'template_default': "default",
+    \    'template_ext': '.tpl',
+    \     'auto_export': 1,
+    \    'auto_toc': 1}]
+# So after this settings, the default.tpl will be used as the template for generating html files. Inside the template.tpl, you can put your customized css and js and so on.                        
+# All the default settings and  vim script to generate html from the .wiki file is under /Users/chenliu/.vim/bundle/vimwiki/autoload/vimwiki
+
+}}}
 
 
 == ctrl-p ==
 {{{
 # use cmd+f to invoke
+# 搜索基于启动 vim 时候的 base_dir 
+# 可以使用  :lcd {path} 来设置当前窗口的工作目录。
 c-b                 # different search mode. files/mru files/buffer
 c-p, c-n            # previews search; next search
 c-j, c-k            # choose search result

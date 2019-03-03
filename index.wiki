@@ -1,20 +1,42 @@
-== Nothing's Personal Wiki ==
+* [[Todo]]
+* [[TO LEARN]]
+* [[Work Note]]
 
-[[lang]]
+== Programming ==
+* [[Java]]
+* [[Go]]
+* [[Python]]
+* [[JS]]
+* [[HTML&CSS]]
+* [[Kotlin]]
+* [[db]]
 
-[[linux]]
+== Tools ==
+* [[Vim]]
+* [[tmux]]
+* [[Git]]
+* [[Idea]]
+* [[Mac]]
+* [[Effective KDD]]
 
-[[vim]]
+== Linux ==
+* [[Commands]]
+* [[Shell]]
+* [[RegEx]]
+* [[Sed & Awk]]
 
-[[db]]
+== Book Note==
+* [[English Note]]
+* [[Tech Books]]
+* [[presentation]]
+* [[Refacoring 2]]
 
-[[tools]]
 
-[[docker]]
+¯\_(ツ)_/¯
 
-[[english]]
 
-[[reading]]
-
-[[tmp]]
+wdk-tms-bartender-task011011139246.na62
+wdk-tms-bartender-task011011024142.na61
+wdk-tms-bartender-task011021095234.center.na62
+wdk-tms-bartender-task011027000221.center.na61
 

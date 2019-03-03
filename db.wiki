@@ -6,6 +6,7 @@
     * Read committed
     * Repeatable reads
     * Serializable
+4. DB 范式，范化，就是不断拆表，把一张表拆成多张表。拆多了的好处是：你只有部分数据，原来你要建一张表，一堆 null 字段； 现在你只要建一张小表，另外是 null 的表都不需要建了。
 
 
 

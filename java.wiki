@@ -7,4 +7,42 @@
 jar uf0 foo.jar BOOT-INFO/lib/mysql.jar         # 将 mysql.jar 添加到 foo.jar中 
 }}}
 3. sb debug 运行，暴露远程 debug 端口:
+{{{
 java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar app.jar
+# 服务器暴露 debug 端口
+
+# setenv.sh 添加
+SERVICE_OPTS="${SERVICE_OPTS} -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000"
+
+}}}
+
+
+4. dump 内存分析 （eclipse MAT 分析）
+{{{
+sudo -u admin /opt/taobao/java/bin/jmap -dump:format=b,file=/tmp/dump.dat [[104930]]
+}}}
+
+5. debug hsql in mem db
+{{{
+## not forget to configure the breakpoint to let other thread to run. (means not to freeze all thread!)
+org.hsqldb.util.DatabaseManagerSwing.main(new String[] {   "--url",  "jdbc:hsqldb:mem:myDbNameHere", "--noexit" })
+}}}
+
+
+
+
+
+
+
+== Snnipt ==
+1. fileter out element in one list but not in another list.
+{{{
+    List<ServiceDTO> ownedApps = serviceFacade.findServicesByRole(bucSSOUser.getEmpId(), "app_ops");
+    List<ServiceDTO> staredApps = serviceFacade.findStaredServices(bucSSOUser.getEmpId());
+    List<ServiceDTO> filteredStaredApps= staredApps.stream().filter(
+            p -> ownedApps.stream().noneMatch(
+                i -> i.getServiceName().equalsIgnoreCase(p.getServiceName())
+                )).collect(Collectors.toList());
+}}}
+
+

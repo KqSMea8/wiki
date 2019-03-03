@@ -1,0 +1,83 @@
+=== KDD: Keyboard Drive Develop 键盘驱动开发 ===
+* [ ] 总体原则
+    * [ ] 键盘只是工具，思想才是关键
+    * [ ] 键盘不要经常换，用熟一款
+    * [ ] 快捷键不用刻意去记
+    * [ ] 使用统一的一套快捷键（VI 模式）
+    * [ ] 好处：所想即所得, 思维不被打扰 
+
+
+* [ ] 键盘设置
+    * [ ] 原则：双手不要离开键盘主区域
+    * [ ] ctrl 键 和 caplocks 键 互换(或者 ctrl 和 caplocks 都作为 ctrl)
+    * [ ] 重新映射方向键: ctrl-hjkl ("可以使用hammerspoon)
+    * [ ] 可以使用不同的 keyboard-profile (一个键位在不同的 profile 中是不同的含义) (可以使用Karabiner）
+
+* [ ] vim
+    * [ ] 学会使用帮助
+        * [ ] :h help
+        * [ ] :h motion.txt
+        * [ ] 一些常规操作
+    * [ ] 一些插件
+        * [ ] vimwiki： 个人知识管理
+            * [ ] 类似 wiki，无限链接
+            * [ ] 快速创建链接页面(从来不用新建文件)
+            * [ ] enter/退格 来 进入/退出 页面
+            * [ ] 使用 wiki 语法,目前也支持 markdown 编写
+            * [ ] 生成 html，可定制
+        * [ ] ctrl-p: 快速找文件
+        * [ ] nerdTree: 目录
+        * [ ] https://vimawesome.com/ : 插件推荐、排名
+    * [ ] vimrc: customize your vim
+    * [ ] 推荐：[[https://book.douban.com/subject/10599776/|《Practical Vim》]]
+
+* [ ] chrome: cvim 不用鼠标浏览网页
+    * [ ] basic usage
+    * [ ] lost address forcus
+
+* [ ] spectacle 窗口管理
+    * [ ] center, full-screen
+    * [ ] left-half, right-half
+    * [ ] larger, smaller
+
+* [ ] jenv: java 环境管理
+    * [ ] jenv list
+    * [ ] jenv use (公司环境和开源环境切换)
+    * [ ] jenv install/uninstall
+* [ ] iterm, zsh, [[https://github.com/robbyrussell/oh-my-zsh|oh-my-zsh]]
+    
+* [ ] IntelliJ
+    * [ ] keymap setting: Mac Or Win
+    * [ ] Navigation:
+        * [ ] cmd-o: Nav class, Camel Case
+        * [ ] cmd-shift-o:  Nav file
+        * [ ] cmd-shift-f: 全文搜索,支持正则，支持搜索文件类型，支持搜索范围
+        * [ ] cmd-e: 最近浏览过的文件
+        * [ ] cmd-shift-e: 最近编辑过的文件
+        * [ ] cmd-1,2,3,4...: 不同的panel
+        * [ ] shif-cmd-F12: 只留下编辑页面
+        * [ ] cmd-shift-a: 查找 action
+        * [ ] cmd-^-s: 定位当前文件的目录
+        * [ ] cmd-alt-b: 定位到接口的实现
+        * [ ] cmd-u: 从实现到接口（up 一层）
+        * [ ] cmd-向上箭头： 在目录结构中定位
+    * [ ] 编辑
+        * [ ] cmd-n: 在 project-panel 中，新建文件
+        * [ ] cmd-shift-n: 临时测试可以使用 scratch-file, 不会放入到项目，会自动删除
+        * [ ] cmd-n：在文件内，可以生成 setter、getter、toString 等
+        * [ ] cmd-alt-l: format code （建议安装 ali 代码规约插件，使用 ali 的 codestyle） 
+        * [ ] 自动补全，如 notnull
+        * [ ] alt-enter：还可以自动声明变量
+        * [ ] 文件内编辑，使用 vim  (IdeaVim)
+        * [ ] cmd-+/-: 收起当前方法实现
+        * [ ] cmd-shift-+/-:首期所有方法实现
+        * [ ] cmd+y： quick definition, 不离开编辑页
+    * [ ] Help
+        * [ ] Tips of the day
+        * [ ] Keymap Ref
+        * [ ] Productivity Guide
+    * Misc
+        * [ ] git commit: cmd-k  cmd-shift-k.  tab and space to make push
+        * [ ] 修改 pom，重新 import。 settings search: Reimport, 设置快捷键
+        * [ ] key-promoter
+        * [ ] 任何你经常使用的功能，都可以寻找快捷键，如果没有，就去 keymap 设置。

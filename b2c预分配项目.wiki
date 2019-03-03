@@ -1,0 +1,38 @@
+{{{
+# 测试接口数据
+    [
+        [
+            "2",
+        "4",
+        "6"
+        ],
+        3,
+        0,
+        {
+            "seconds": "1516762145",
+            "nanos": "209000000",
+            "class": "java.time.Instant"
+        },
+        {
+            "seconds": "1516762155",
+            "nanos": "209000000",
+            "class": "java.time.Instant"
+        }
+    ]
+  }}}
+  
+  
+  
+=== code review ===
+1. DDD 概念， 代码接口，分包原则。
+2. RPC 接口设计，Exception or Resutl
+3. 领域对象，领域层不要被污染。
+4. 编码规范化
+    * 代码模板要统一，保存时 cmd+alt+l 确保代码格式化过。 （格式一定要统一）
+    * 日志要规范, error, info。 尽量有意义
+    * 注释规范化
+    * 阿里代码规约，尽量消除 warning。
+5. 
+
+
+ CATALINA_OPTS="${CATALINA_OPTS} -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000"

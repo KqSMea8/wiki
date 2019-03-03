@@ -12,3 +12,12 @@ cmd-d               # split window
 cmd-shift-d         # split window vertically
 md+[,]             # select left/right window,
 }}}
+
+
+== key visual ==
+{{{
+# use keycastr
+https://github.com/keycastr/keycastr
+
+cmd+alt+ctrl-k  # trigger key display.
+}}}

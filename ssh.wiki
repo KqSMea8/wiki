@@ -1,4 +1,4 @@
-=== config two git account ===
+== config two git account ==
 1. generate two ssh-key
 2. copy the pub_key into github/gitlab account settings.
 3. config ~/.ssh/config

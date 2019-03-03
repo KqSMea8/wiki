@@ -1,0 +1,11 @@
+1. jenv
+2. idea key-shutcarts,  plugins
+3. vim, vimwiki, 保存时没有权限？
+4. iterm, oh-my-zshell, tmux
+5. chrome, cvim, lost address focus
+6. keyboard settings: ctrl-shift extrange, c-hijk, keyboard-profile
+7. window size,  spec
+8. git cmd.  use git lg to see log.  git log -p file-name 查看 file 变更记录
+
+
+[[kdd_presentation]]

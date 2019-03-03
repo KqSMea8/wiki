@@ -1,0 +1,5 @@
+{{{
+# 查看有效 traceId
+cat hsf.log | grep '_eagleeye_trace_id ->' | cut -d' ' -f3 |  grep -E '^.{23}00'
+
+}}}

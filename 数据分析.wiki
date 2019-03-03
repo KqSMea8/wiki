@@ -1,0 +1,181 @@
+{{{
+-- ================================ deliverer_bill_event ==================================
+show create table deliverer_bill_event 
+-- 1.9 号才上的表
+select * from deliverer_bill_event order by gmt_create ASC limit 20
+-- 不同类型时间（改派、取消等） 的数量
+select event_type, count(*) from deliverer_bill_event group by event_type
+-- 一共 4000多条数据 
+select count(*) from deliverer_bill_event
+-- 创建后没有修改的， 是 event_type = 5 和 15 的。  140 多条。  事件发生时间 = 创建时间 = 修改时间
+select * from deliverer_bill_event where gmt_create = gmt_modified  
+select count(*) from deliverer_bill_event where gmt_create = gmt_modified  
+-- 创建后修改的，是 event_type = 10 和 20 的。   4000多条。  事件发生时间=修改时间 ！= 创建时间。（创建后有修改）
+select * from deliverer_bill_event where gmt_create != gmt_modified 
+select count(*) from deliverer_bill_event where gmt_create != gmt_modified  
+
+
+
+-- ================================ deliverer_order_batch ==================================
+show create table deliverer_order_batch
+-- 17年 11.19 号开始使用
+select * from deliverer_order_batch  order by gmt_create  DESC
+-- 115W 多条
+select count(*) from deliverer_order_batch 
+-- 4950 个单独的配送员送过货
+select count(distinct(deliverer_id)) from deliverer_order_batch 
+-- 仓内: 10W,  站内：0 ，  离站配送: 105W
+select location_status, count(*) from deliverer_order_batch group by location_status
+-- (2,0) => 105W,   (3,0) => 6.1W,  (3,1) => 4.6W    			？？（3，0），（3，1）对应的是力战配送类型 ？？
+select biz_order_type,sub_biz_order_type, count(*) from deliverer_order_batch group by biz_order_type,sub_biz_order_type
+-- 批次号知会出现一次。 		？？没有批次被重新分配？？
+select batch_id, count(distinct(batch_id)) from deliverer_order_batch group by batch_id having count(distinct(batch_id)) > 1
+-- 批次状态分布（待揽收、已分配、已完成、取消等）
+select status,count(status) from deliverer_order_batch group by status
+-- 不同类型的批次状态分布
+select biz_order_type,sub_biz_order_type,status, count(*) from deliverer_order_batch group by biz_order_type ,sub_biz_order_type ,status 
+-- 按照月份纬度查看揽收多少单子
+select year(ship_time), month(ship_time), count(*) from deliverer_order_batch group by year(ship_time),month(ship_time)
+-- 按照站点统计批次数量
+select delivery_dock_code, delivery_dock.name, count(*) from deliverer_order_batch batch join delivery_dock 
+on batch.delivery_dock_code = delivery_dock.code
+group by delivery_dock_code  order by count(*) DESC
+-- 批次属性汇总：0团餐 1及时达 2定时达   3=> 104W, 7=>10W   ?? 批次属性， 为什么会有 2，3，6，7 ？？
+select batch_attr,count(*) from deliverer_order_batch group by batch_attr
+-- ?? demand_info_id, package_id, batch_name 如何使用 ??
+-- 批次包含运单汇总: 生鲜最多包含5单。  b2c 可以包含很多单
+select biz_order_type ,sub_biz_order_type , delivery_order_count ,count(*) from deliverer_order_batch group by biz_order_type,sub_biz_order_type, delivery_order_count 
+select biz_order_type ,sub_biz_order_type , uncanceled_delivery_order_count  ,count(*) from deliverer_order_batch group by biz_order_type,sub_biz_order_type, uncanceled_delivery_order_count  
+-- 包裹数量汇总. 大部分是生鲜，1个包裹 105W
+select biz_order_type,sub_biz_order_type,package_number, count(*) from deliverer_order_batch group by biz_order_type,sub_biz_order_type, package_number 
+-- 调度员指派批次汇总
+select biz_order_type,sub_biz_order_type,assigner_name, count(*) from deliverer_order_batch group by biz_order_type,sub_biz_order_type,assigner_name order by count(*) DESC
+
+
+-- ================================ deliverer_order_delivery ==================================
+show create table deliverer_order_delivery
+select * from deliverer_order_delivery limit 20
+-- 按照销售取到汇总
+select biz_order_type,sub_biz_order_type, sales_channel, count(*) from deliverer_order_delivery  group by biz_order_type,sub_biz_order_type,sales_channel 
+-- 按照配送服务类型汇总（及时达、定时达、极速达）
+select biz_order_type,sub_biz_order_type, delivery_service , count(*) from deliverer_order_delivery  group by biz_order_type,sub_biz_order_type,delivery_service  
+
+}}}
+
+
+== petaDB 数据 ==
+{{{
+##  已分配运单
+SELECT deliverer_id as id, count(*) as c
+  FROM `deliverer_order_delivery` orderr
+ where 1=1 
+and orderr.status in (15,20)
+and gmt_modified > #startTime# 
+and gmt_modified  < #endTime#
+GROUP BY deliverer_id
+
+
+## 配送中运单
+select a.id as id, a.c as c, b.id as id2, b.c as c2 from 
+(SELECT deliverer_id as id, count(*) as c
+  FROM `deliverer_order_delivery` orderr
+ where 1=1 
+and orderr.status in (30)
+and gmt_modified > #startTime# 
+and gmt_modified  < #endTime#
+AND delivery_dock_code=#dockCode#   
+GROUP BY deliverer_id) a
+full join 
+(SELECT task.deliverer_id as id, COUNT(1) as c
+FROM deliverer_order_take o LEFT JOIN deliverer_status_task_take task ON o.id = task.deliverer_order_take_id 
+WHERE task.end_task_time IS NULL 
+AND o.gmt_modified>= #startTime# 
+AND o.gmt_modified <= #endTime#
+AND o.delivery_dock_code=#dockCode#   
+AND o.status in ( 10 ) 
+GROUP BY task.deliverer_id) b
+on a.id=b.id
+
+
+## 已完成运单
+select a.id as id, a.c1 as c, b.id as id2, b.c2 as c2 from (
+SELECT orderr.deliverer_id as id, count(*) as c1
+  FROM `deliverer_order_delivery` orderr left join 
+  deliverer_status_task_delivery task_status 
+  on orderr.id  = task_status.delivery_id 
+ where 1=1 
+and orderr.gmt_modified > #startTime#
+and orderr.gmt_modified  < #endTime#
+and task_status.sign_time > #startTime#
+and delivery_dock_code = #dockCode# 
+GROUP BY task_status.deliverer_id) a
+full join
+(SELECT  taskTake.deliverer_id as id, count(1) as c2 from  deliverer_order_take take LEFT JOIN 
+deliverer_status_task_take taskTake on taskTake.deliverer_order_take_id = take.id 
+WHERE 
+take.gmt_modified>= #startTime# 
+AND take.gmt_modified <= #endTime#
+and take.delivery_dock_code =#dockCode#  
+ AND take.status in ( 50 , 20 ) AND taskTake.take_sku_time > CURDATE()  
+GROUP BY deliverer_id ) b
+on a.id=b.id
+
+}}}
+
+
+
+
+
+
+CREATE TABLE `deliverer_order_batch` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `gmt_create` datetime NOT NULL COMMENT '创建时间',
+  `gmt_modified` datetime NOT NULL COMMENT '修改时间',
+  `deliverer_id` bigint(20) DEFAULT NULL COMMENT '配送员id',
+  `batch_id` bigint(20) NOT NULL COMMENT '批次号',
+  `biz_order_type` int(11) NOT NULL COMMENT '业务类型',
+  `sub_biz_order_type` int(11) NOT NULL COMMENT 'biz_order_type为3时，1表示冷链',
+  `status` int(11) NOT NULL COMMENT '状态',
+  `ship_time` datetime DEFAULT NULL COMMENT '揽收时间',
+  `batch_gmt_create` datetime NOT NULL COMMENT '批次创建时间',
+  `delivery_dock_code` varchar(128) NOT NULL COMMENT '配送站code',
+  `demand_info_id` bigint(20) DEFAULT NULL COMMENT '众包时段id',
+  `batch_attr` int(11) NOT NULL COMMENT '批次属性，1：团餐，2：及时达，3：定时达',
+  `package_id` varchar(3000) NOT NULL COMMENT '包裹编号 list 逗号分隔',
+  `batch_name` varchar(256) NOT NULL COMMENT '批次名称',
+  `delivery_order_count` int(11) NOT NULL DEFAULT '0' COMMENT '送货单个数',
+  `uncanceled_delivery_order_count` int(11) NOT NULL DEFAULT '0' COMMENT '未取消送货单个数',
+  `arrive_dock_time` datetime DEFAULT NULL COMMENT '批次最后入站时间',
+  `arrive_status` int(11) DEFAULT '0' COMMENT '入站状态：0，表示未入站，1：部分入站，2表示全部入站',
+  `first_arrive_dock_time` datetime DEFAULT NULL COMMENT '批次首次入站时间',
+  `deliverer_phone` varchar(25) DEFAULT NULL COMMENT '揽收配送员电话',
+  `deliverer_name` varchar(25) DEFAULT NULL COMMENT '配送员姓名',
+  `picked_time` datetime DEFAULT NULL COMMENT '拣货完成时间',
+  `packaged_time` datetime DEFAULT NULL COMMENT '打包完成时间',
+  `leave_dock_time` datetime DEFAULT NULL COMMENT '离站配送时间',
+  `location_status` int(11) DEFAULT '10' COMMENT '配送站位置状态 10 仓内，20:站内：30 离站配送',
+  `package_number` int(11) DEFAULT NULL COMMENT '包裹数量',
+  `est_arrive_time` datetime DEFAULT NULL COMMENT '预期入站时间',
+  `warehouse_code` varchar(64) DEFAULT NULL COMMENT '门店仓库编码',
+  `batch_path_order` varchar(2000) DEFAULT NULL COMMENT '订单配送顺序',
+  `batch_distance` decimal(10,3) DEFAULT NULL COMMENT '批次配送距离',
+  `est_endtime` datetime DEFAULT NULL COMMENT '预期配送完成时间',
+  `est_taketime` datetime DEFAULT NULL COMMENT '预计揽收时间',
+  `batch_group_id` bigint(20) DEFAULT NULL COMMENT '批次组ID',
+  `batch_assign_type` int(11) DEFAULT NULL COMMENT '0-追批 1-二次合批 2-人工指派 3-人工改派',
+  `earliest_arrive_time` datetime DEFAULT NULL COMMENT '期望送达最早时间',
+  `latest_arrive_time` datetime DEFAULT NULL COMMENT '期望最晚送达时间',
+  `assigned_time` datetime DEFAULT NULL COMMENT '指派时间',
+  `accepted_time` datetime DEFAULT NULL COMMENT '指派确认接受时间',
+  `area_name` varchar(50) DEFAULT NULL COMMENT '批次所在区块名称',
+  `assigner_name` varchar(20) DEFAULT NULL COMMENT '（人工调度）指派调度员名称',
+  `manager_scan_time` datetime DEFAULT NULL COMMENT '站长扫码过机时间',
+  `broadcast_time` datetime DEFAULT NULL COMMENT '批次到站广播时间',
+  `storage_code` varchar(20) DEFAULT NULL COMMENT '批次存放位置编码',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_batch_id` (`batch_id`),
+  KEY `idx_gmt_create` (`gmt_create`),
+  KEY `idx_gmt_create_status` (`delivery_dock_code`,`status`,`gmt_create`),
+  KEY `idx_deliverer_id_gmt_create` (`deliverer_id`,`status`,`gmt_create`),
+  KEY `idx_dock_lasttime_status` (`delivery_dock_code`,`latest_arrive_time`,`status`)
+) ENGINE=InnoDB AUTO_INCREMENT=5050267 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='批次表'

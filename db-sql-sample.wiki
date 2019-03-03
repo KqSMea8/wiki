@@ -1,0 +1,270 @@
+=== 已完成订单 ===
+{{{
+    select a.id as id, a.c1 as c, b.id as id2, b.c2 as c2 from (
+            SELECT orderr.deliverer_id as id, count(*) as c1
+            FROM `deliverer_order_delivery` orderr left join 
+            deliverer_status_task_delivery task_status 
+            on orderr.id  = task_status.delivery_id 
+            where 1=1 
+            and orderr.gmt_modified > #startTime#
+            and orderr.gmt_modified  < #endTime#
+            and task_status.sign_time > #startTime#
+            and delivery_dock_code = #dockCode# 
+            GROUP BY task_status.deliverer_id) a
+        full join
+        (SELECT  taskTake.deliverer_id as id, count(1) as c2 from  deliverer_order_take take LEFT JOIN 
+         deliverer_status_task_take taskTake on taskTake.deliverer_order_take_id = take.id 
+         WHERE 
+         take.gmt_modified>= #startTime# 
+         AND take.gmt_modified <= #endTime#
+         and take.delivery_dock_code =#dockCode#  
+         AND take.status in ( 50 , 20 ) AND taskTake.take_sku_time > CURDATE()  
+         GROUP BY deliverer_id ) b
+        on a.id=b.id
+}}}
+
+
+=== 配送中 ===
+{{{
+    select a.id as id, a.c as c, b.id as id2, b.c as c2 from 
+        (SELECT deliverer_id as id, count(*) as c
+         FROM `deliverer_order_delivery` orderr
+         where 1=1 
+         and orderr.status in (30)
+         and gmt_modified > #startTime# 
+         and gmt_modified  < #endTime#
+         AND delivery_dock_code=#dockCode#   
+         GROUP BY deliverer_id) a
+        full join 
+        (SELECT task.deliverer_id as id, COUNT(1) as c
+         FROM deliverer_order_take o LEFT JOIN deliverer_status_task_take task ON o.id = task.deliverer_order_take_id 
+         WHERE task.end_task_time IS NULL 
+         AND o.gmt_modified>= #startTime# 
+         AND o.gmt_modified <= #endTime#
+         AND o.delivery_dock_code=#dockCode#   
+         AND o.status in ( 10 ) 
+         GROUP BY task.deliverer_id) b
+        on a.id=b.id
+}}}
+
+=== 已分配 ===
+{{{
+SELECT deliverer_id as id, count(*) as c
+  FROM `deliverer_order_delivery` orderr
+ where 1=1 
+and orderr.status in (15,20)
+and gmt_modified > #startTime# 
+and gmt_modified  < #endTime#
+GROUP BY deliverer_id
+}}}
+
+
+=== 到站配送员列表 ===
+{{{
+    select a.*,b.device_type as device_type, b.app_version as app_version from 
+        (SELECT a.id as id, a.name as name, a.phone as phone, a.deliverer_type as type, a.deliverer_work_status as work_status, 
+         a.delivery_dock_code as register_dock_code, c.delivery_dock_code as working_dock, 
+         d.current_level as level, d.current_level_benefit as level_benefit,
+         c.deliverer_opr_status as opr_status, c.arrive_dock_time as arrive_time,c.lastest_poi_update_time as lastest_poi_update_time 
+         FROM `delivery_operator_basic` a 
+         LEFT JOIN deliverer_indicators c
+         on c.deliverer_id=a.id
+         LEFT JOIN rb_deliverer_level d
+         on d.deliverer_id=a.id
+         where a.deliverer_work_status in (1,2,3) 
+         and a.personnel_status = 1
+         and (
+             a.delivery_dock_code= #dockCode# 
+             or c.delivery_dock_code= #dockCode# 
+             )    
+         and d.bi_flag_id in 
+         (
+          select max(id) as flagId FROM rb_bi_flag WHERE biz_type="level" and status = 2 
+         )
+        ) a 
+        LEFT JOIN wdk_loc_delivery_operator b
+        on b.id=a.id
+}}}
+
+
+=== 俺配送员 id 查询 ===
+{{{
+    select a.*,b.device_type as device_type, b.app_version as app_version from 
+        (SELECT a.id as id, a.name as name, a.phone as phone, a.deliverer_type as type, a.deliverer_work_status as work_status, 
+         a.delivery_dock_code as register_dock_code, c.delivery_dock_code as working_dock, 
+         d.current_level as level, d.current_level_benefit as level_benefit,
+         c.deliverer_opr_status as opr_status, c.arrive_dock_time as arrive_time,c.lastest_poi_update_time as lastest_poi_update_time 
+         FROM `delivery_operator_basic` a 
+         LEFT JOIN deliverer_indicators c
+         on c.deliverer_id=a.id
+         LEFT JOIN rb_deliverer_level d
+         on d.deliverer_id=a.id
+         where a.deliverer_work_status in (1,2,3) 
+         and a.personnel_status = 1
+         @if(!isEmpty(dockCode)){
+         and (
+                 a.delivery_dock_code= #dockCode# 
+                 or c.delivery_dock_code= #dockCode# 
+             )
+         @} 
+         @if(!isEmpty(idList)){
+         and a.id in 
+         (0
+          @for(id in idList){
+          ,#id#
+          @}
+         )
+         @} 
+         and d.bi_flag_id in 
+             (
+              select max(id) as flagId FROM rb_bi_flag WHERE biz_type="level" and status = 2 
+             )
+             ) a 
+             LEFT JOIN wdk_loc_delivery_operator b
+             on b.id=a.id
+}}}
+
+
+
+
+
+{{{
+SELECT  status FROM deliverer_order_batch WHERE deliverer_id=123 and  assigned_time between(123,456)
+    GROUP BY status
+}}}
+
+
+{{{
+# 批量 骑士固定时间段批次状态统计
+SELECT deliverer_id,status, COUNT(status) from deliverer_order_batch
+WHERE biz_order_type=3,
+AND biz_order_type=3    #  b2c 类型
+AND assigned_time BETWEEN '2018-01-01 00:00' AND '2018-01-31 23:59:59'    # 时间段
+GROUP BY status
+
+
+# 批量 骑士固定时间段分配的订单数
+ SELECT deliverer_id,COUNT(uncanceled_delivery_order_count) FROM deliverer_order_batch
+ WHERE deliverer_id > 0 # 批量骑士 id
+ AND biz_order_type=3  # b2c 类型
+ AND assigned_time BETWEEN '2018-01-01 00:00' AND '2018-01-31 23:59:59'  # 时间段
+ GROUP BY deliverer_id
+
+# 批量 骑士固定时间配送区域
+SELECT DISTINCT(area_name) FROM deliverer_order_batch 
+WHERE deliverer_id > 0  #  单个骑士id
+AND biz_order_type=3    # b2c 类型
+AND assigned_time BETWEEN '2018-01-01 00:00' AND '2018-01-31 23:59:59'    # 时间段
+}}}
+
+=== metrics-sql ===
+{{{
+# 批量 骑士固定时间段批次状态统计
+SELECT deliverer_id,status, COUNT(status) from deliverer_order_batch
+WHERE biz_order_type=3 --b2c 类型批次
+-- 骑士编号，批量
+@if(!isEmpty(idList)){
+AND deliverer_id in 
+(0
+@for(id in idList){
+,#id#
+@}
+)
+@}
+AND assigned_time BETWEEN #startTime# AND #endTime#  --时间段
+GROUP BY status
+
+# param: [15692,15295,17463]
+# result:
+[{"deliverer_id":15295,"status":4,"COUNT(status)":13},{"deliverer_id":15295,"status":5,"COUNT(status)":4},{"deliverer_id":15692,"status":9,"COUNT(status)":469}]
+
+
+
+# 批量 骑士固定时间段分配的订单数
+SELECT deliverer_id,COUNT(uncanceled_delivery_order_count) FROM deliverer_order_batch
+WHERE biz_order_type=3 --b2c 类型批次
+-- 骑士编号，批量
+@if(!isEmpty(idList)){
+AND deliverer_id in 
+(0
+@for(id in idList){
+,#id#
+@}
+)
+@}
+AND assigned_time BETWEEN #startTime# AND #endTime#  --时间段
+GROUP BY deliverer_id
+
+# result
+ [{"deliverer_id":15692,"COUNT(uncanceled_delivery_order_count)":330},{"deliverer_id":15295,"COUNT(uncanceled_delivery_order_count)":151},{"deliverer_id":17463,"COUNT(uncanceled_delivery_order_count)":5}]
+
+# 批量 骑士固定时间配送区域
+SELECT deliverer_id,area_name FROM deliverer_order_batch 
+WHERE biz_order_type=3  -- b2c 类型批次
+-- 骑士编号，批量 
+@if(!isEmpty(idList)){
+AND deliverer_id in 
+(0
+@for(id in idList){
+,#id#
+@}
+)
+@}
+AND assigned_time BETWEEN #startTime# AND #endTime#  --时间段
+GROUP BY deliverer_id,area_name
+
+# params [16624,15618,11086]
+# result
+[{"deliverer_id":11086,"area_name":"A北一区"},{"deliverer_id":15618,"area_name":"D东二区"},{"deliverer_id":16624,"area_name":"中四区C"},{"deliverer_id":11086,"area_name":"A西区"}]
+
+}}}
+
+
+== b2c  console 三类 sql 查询 ==
+{{{
+-- 骑士运单总量
+SELECT deliverer_id,COUNT(uncanceled_delivery_order_count) FROM deliverer_order_batch
+WHERE deliverer_id > 0 
+AND biz_order_type =3 
+AND sub_biz_order_type =0
+#AND assigned_time BETWEEN '2011-01-01 00:00' AND '2018-01-31 23:59:59' 
+GROUP BY deliverer_id
+
+-- 骑士批次区域
+SELECT deliverer_id,batch_id,area_name,assigned_time,biz_order_type FROM deliverer_order_batch where assigned_time IS NOT NULL 
+
+SELECT deliverer_id,batch_id,area_name FROM deliverer_order_batch
+WHERE deliverer_id >0
+AND biz_order_type =3 
+AND sub_biz_order_type =0 
+AND BETWEEN '2018-01-01 00:00' AND '2018-01-31 23:59:59' 
+
+
+-- 骑士批次状态
+SELECT *,COUNT(status) from deliverer_order_batch GROUP BY status
+
+SELECT deliverer_id,status,COUNT(status) from deliverer_order_batch 
+WHERE id>0
+#AND biz_order_type=3 
+#AND sub_biz_order_type=0
+AND assigned_time  BETWEEN '2018-01-01 00:00' AND '2018-01-31 23:59:59' 
+GROUP BY status
+
+
+
+-- 骑士分配的批次统计，按照 storage-code 
+{{{
+    SELECT batch_storage.deliverer_id,count(*) from deliverer_order_batch AS batch JOIN delivery_dock_batch_storage_assign AS batch_storage
+        ON batch.storage_code = batch_storage.code
+        AND batch.delivery_dock_code = batch_storage.delivery_dock_code
+        WHERE batch_storage.deliverer_id IN #delivererIdList#
+        AND delete_time IS NULL
+        AND batch.biz_order_type=#bizOrderType#
+        AND batch.sub_biz_order_type=#subBizOrderType#
+        AND assigned_time BETWEEN #startTime# AND #endTime#
+        GROUP BY batch_storage.deliverer_id
+
+}}}
+
+
+

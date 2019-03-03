@@ -1,0 +1,38 @@
+== RDB ==
+* russia-screen:
+    * [[http://daily.tiddo.alibaba-inc.com/RdbOps/page/redisManage/index.html | daily env]]:2ed3edc3-e741-4118-a9b6-0d81c48d48ff   页面搜索： ae-data-russia-screen-b
+    * [[ http://tiddo.alibaba-inc.com/new-rdb-service/page/rdbMyInstance/index.html | prod env]]: 82cbf642-34c0-4f13-b681-78618ced2df8
+    * 
+
+== Diamond ==
+[[http://diamond.alibaba-inc.com/diamond-ops/static/pages/config/index.html?spm=a1zco.mw-index.diamondserver.2.18a2e73d0Nj4ju&serverId=pre | OPS ]]
+dataId: appGroup:appName.properties
+
+
+
+== autoscale system ==
+
+* calculated_replica = sum/target(取 qps 要根据应用类型调不同的接口), range in [min,max], range in [replcia*0.8, replica*2], => calculated_replicas.  这个值一定会更新到 autoscaler 中，不一定会更新到 RS.spec_replica中。
+    * case 实时模式： 将 calculated_replcia 更新到 RS.spec_replica, 设置 isMin=false
+    * case 扩容模式： 将 calculated_replica 更新到 RS.spec_replica， 同时设置 RS.isMin=true. (RS Processor 需要改造，确保不会删除 container obj)
+    * case 峰值模式： final_replica的计算有变。  若扩容则直接更新RS.spec_replica,设置 isMin=false。 若缩容则判断时间段, 在时间段外则不更新到 RS.spec_replcia
+* 另外对于 global off 情况，需要在执行层拦截。（抛弃所有的 ais 扩缩容调用）
+* 
+* http://ons-api.alibaba-inc.com/?spm=a1zco.mw-index.metaq.1.1623b416BnhJGw#/home/sub   archimedes_as_api_server 查询消费者.
+* ae-archimedes-demo-s_us_host 应用配置了白名单，预发上会处理，正式不会处理。
+
+
+
+=== ae-url-redirector ===
+1. How to test offline:
+{{{
+# 1. 开启 whistle
+sudo whistle start   
+# 2. 设置手机代理，ip:port
+# 3. 手机访问网页，发现请求已经走whistle 代理
+# 4. 需要安装 https 证书，访问 wistle 主页，https，下载证书
+# 5. 手机安装 https 证书，并且在 设置-> 通用 -> 关于本机 -> 证书信任  中，添加对证书的信任。
+# 6. 注意 ihost 和 whistle 的host 绑定冲突等问题，建议直接用 whistle 即可。
+
+http://d.aliexpress.com:7001/https://m.aliexpress.com/s/item/32823426168.html?ck=xx&_app=required&lp=false  for test
+}}}

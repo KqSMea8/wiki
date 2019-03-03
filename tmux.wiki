@@ -1,0 +1,69 @@
+
+(C-x means ctrl+x, M-x means alt+x)
+
+== Sessions, windows, panes ==
+* `Session` : tmux 是被设计为 cs 结构的。因此当你启动 tmux 的时候, 实际上你启动的是 tmux 的 client。服务端可能也在你的电脑上或者其他服务器上，总之要连接 client 和 server， 就需要一个 session。一般来说一个 session 对应这一个 project。
+* `Window` : 一个 session 包含多个 window，这里的 window 比较类似一般 terminal 模拟器的 tab。
+* `Pane` : 一个 window 可以被分割为多个 pane，方便同时查看多个进程的状态。
+
+== basic ==
+{{{
+~/.tmux.conf    # 用户自定义的 tmux 配置, 会覆盖全局配置 
+/etc/tmux.conf  # 全局配置。 
+
+
+##  在 tmux 外部（普通 cli 中），可以使用如下命令和 tmux 交互。
+tmux                                # 开启一个 tmux session, 匿名 session
+tmux new -s workspace               # 开启一个 session，名为 workspace， 一般一个 project 一个 session 
+tmux ls                             # list all sessions
+tmux a -t workspace                 # attach a session, -t target, 如果 attach 到一个 session，则当前窗口会和 attach 的窗口保持 实时的 同步。
+tmux kill-session -t abc            # 关闭某个 session
+tmux kill-server                    # 完全退出
+
+## 在 tmux 内部(当前窗口已经是 tmux 的 window):
+# ------Session-----
+C-b s                   # list sessions
+C-b $                   # rename current session
+C-b d                   # detach current session (不是关闭,之后可以回来）
+
+# -----Window-------
+C-b c                   # creat window
+C-b ,                   # name window   
+# choose window
+C-b w                   # list windows, and then use hjkl to choose window.
+C-b n                   # next window. 底下状态条可以看到当前 window 有一个*号。 C-b p 上一个 window
+C-b l                   # ‘last’ (previously used) window
+C-b 0...9               # choose window
+
+# -----Pane--------
+C-b %                   # 水平切分, 切分后pane 在同一目录。若要切分后保持文件的编辑状态，则用 vim 的 window 比较合适。
+C-b quote               # 垂直切分
+C-b z                   # zoom in and zoom out
+
+C-b 方向                # pane 之间跳转
+C-b alt-方向            # 向指定方向放大、缩小
+
+# 没啥鸟用的快捷键
+C-b q                   # show pane number
+C-b t                   # show Time
+
+#------Misc--------
+C-b ?                   # show all key shortcut
+
+
+}}}
+
+
+
+== 复制模式 ==
+{{{
+# 1. 输入 `+[ 进入复制模式
+# 2. 按下 空格键 开始复制，移动光标选择复制区域
+# 3. 按下 回车键 复制选中文本并退出复制模式
+# 4. 按下 `+] 粘贴文本
+}}}
+
+
+
+
+

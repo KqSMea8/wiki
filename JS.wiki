@@ -1,0 +1,13 @@
+== snippt ==
+1. 判断对象有没有某个属性，或者属性的值是否为空
+{{{
+    if( value ) {
+    }
+    //will evaluate to true if value is not:
+        null
+        undefined
+        NaN
+        empty string ("")
+        0
+        false
+}}}

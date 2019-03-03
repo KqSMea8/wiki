@@ -30,3 +30,14 @@ git add abc # tracked and staged
 modify abc  # unstaged
 git add abc # staged.
 }}}
+
+
+==== 常用 ====
+{{{
+# 查看某个地方是谁添加或者修改了的。 blame sb.
+git blame pom.xml
+
+git lg                          # 查看分之衍进情况，配置了 .gitconf
+
+git log -p {filename}           # 查看文件的变更记录， 哪些提交，修改了什么
+}}}

@@ -1,0 +1,9 @@
+    1.做重构之前，先写好测试用例
+
+    2.每重构一小部分，就跑一次所有用例，确保重构不影响功能. small changes, and test after each change
+
+    3.Extract Method, 是一种非常常用的重构方式，idea快捷键： alt+cmd+m 
+
+    4.抽取方法之后，有必要做两点改进：方法参数是否可以简化； 方法内部变量重命名
+    
+    5.
